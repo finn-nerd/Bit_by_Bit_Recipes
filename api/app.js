@@ -12,6 +12,10 @@ var testAPIRouter = require('./routes/testAPI');
 
 var app = express();
 
+// ensure backend is running
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -25,8 +29,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 // test the API
 app.use('/testAPI', testAPIRouter);
+
+// test client side
+app.use(express.static(path.join(__dirname, '../client/public')));
+app.post('/client-side-test', (req, res) => {
+    const data = req.body.input;
+    console.log('Received:', data);
+    res.json({ message: "SERVER RECEIVED: " + data});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
