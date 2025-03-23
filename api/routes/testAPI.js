@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
+/*
 // PostgreSQL database connection
 const {Client} = require('pg')
 const client = new Client({
@@ -20,6 +21,7 @@ async function connect() {
         console.error("Error connecting to the database:", error);
     }
 }
+*/
 
 // when a GET request is made to '/', the server will respond with the message
 router.get('/', function(req, res, next) {
