@@ -7,7 +7,6 @@ var cors = require("cors");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// test the API
 var testAPIRouter = require('./routes/testAPI');
 
 var app = express();
@@ -23,14 +22,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// service frontend build
+// service static files for frontend build
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // route handlers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
-// test the API
 app.use('/testAPI', testAPIRouter);
 
 // test client side
@@ -39,6 +36,7 @@ app.post('/client-side-test', (req, res) => {
     console.log('Received:', data);
     res.json({ message: "SERVER RECEIVED: " + data});
 });
+
 
 // catch-all route to handle all missed frontend requests
 app.get('*', (req, res) => {
