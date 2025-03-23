@@ -19,6 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 app.use(cors({
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS']
 }));
 app.use(logger('dev'));
