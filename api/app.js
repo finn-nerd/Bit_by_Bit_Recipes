@@ -31,15 +31,15 @@ app.use('/users', usersRouter);
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // catch-all route to handle all frontend requests (important for React Router)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/build/index.html'));
+// });
 
 // test the API
 app.use('/testAPI', testAPIRouter);
 
 // test client side
-app.use(express.static(path.join(__dirname, '../client/public')));
+// app.use(express.static(path.join(__dirname, '../client/build')));
 app.post('/client-side-test', (req, res) => {
     const data = req.body.input;
     console.log('Received:', data);
@@ -58,8 +58,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send(err.message || 'Internal Server Error');
 });
 
 module.exports = app;
