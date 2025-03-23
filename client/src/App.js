@@ -42,24 +42,39 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <div className="text-wrapper">
+          <h1 className="front-title">Bit by Bit Recipes</h1>
+          <h1 className="back-title">Bit by Bit Recipes</h1>
+        </div>
 
-        <h1>React + Express Test</h1>
+        <div className="text-box">
+          <div className="welcome-box">
+            <p className="welcome-text">Welcome! Please enter your username and password! (:</p>
+          </div>
 
-        <p>API Response: {apiResponse}</p>
-
-        <form onSubmit={handleSubmit}>
+          <p className="user-pass-text">Username</p> 
           <input 
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Enter something"
+            className="input-field"
+            placeholder="Enter your username"
           />
-          
-          <button type="submit">submit</button>
+
+          <p className="user-pass-text">Password</p>
+          <input
+            className="input-field"
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <form className="form-box" onSubmit={handleSubmit}>
+          <button className="button-box" type="submit">
+            Submit
+          </button>
         </form>
 
-        <p>User Input Response: {userInputResponse}</p>
+        <h1>User Input Response: {userInputResponse}</h1>
       </header>
     </div>
   );
