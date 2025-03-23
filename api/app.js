@@ -11,9 +11,12 @@ var testAPIRouter = require('./routes/testAPI');
 
 var app = express();
 
-// ensure backend is running
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+// start server (development only)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+}
+
 
 app.use(cors());
 app.use(logger('dev'));
@@ -26,9 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // route handlers
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/testAPI', testAPIRouter);
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/testAPI', testAPIRouter);
 
 // test client side
 app.post('/client-side-test', (req, res) => {
@@ -41,7 +44,7 @@ app.post('/client-side-test', (req, res) => {
 // catch-all route to handle all missed frontend requests
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
- });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

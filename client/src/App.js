@@ -13,7 +13,7 @@ function App() {
 
   // runs function once and makes a GET request to the following link
   useEffect(() => {
-    fetch(`${apiUrl}/testAPI`)
+    fetch(`${apiUrl}/api/testAPI`)
       // converts response into plain text
       .then((res) => res.text())
       // stores response in variable
@@ -26,7 +26,7 @@ function App() {
 
     try {
     // send to server and record response
-    const response = await fetch(`${apiUrl}/client-side-test`, {
+    const response = await fetch(`${apiUrl}/api/client-side-test`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: userInput })
