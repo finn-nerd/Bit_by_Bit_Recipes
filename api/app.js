@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 app.use(cors({
-    origin: '*',
+    origin: 'https://bit-by-bit-recipes.vercel.app/',
     methods: ['GET', 'POST', 'OPTIONS']
 }));
 app.use(logger('dev'));
