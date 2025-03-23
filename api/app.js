@@ -1,15 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require("cors");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require("cors");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var testAPIRouter = require('./routes/testAPI');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const testAPIRouter = require('./routes/testAPI');
 
-var app = express();
+const app = express();
 
 // start server (development only)
 if (process.env.NODE_ENV !== 'production') {
@@ -61,4 +61,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500).send(err.message || 'Internal Server Error');
 });
 
-module.exports = app;
+// if deployed, wrap in serverless for Vercel
+if (process.env.NODE_ENV === 'production') {
+    const serverless = require('serverless-http');
+    module.exports = serverless(app);
+  } else {
+    module.exports = app;
+  }
