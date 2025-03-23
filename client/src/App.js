@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+// set routing api, or let vercel handle local routing
+const apiUrl = process.env.REACT_APP_API_URL || "";
 
 function App() {
 
