@@ -7,14 +7,16 @@ var cors = require("cors");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// test the API
 var testAPIRouter = require('./routes/testAPI');
 
 var app = express();
 
-// ensure backend is running
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// start server (development only)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+}
+
 
 app.use(cors());
 app.use(logger('dev'));
@@ -23,27 +25,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// route handlers
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+// service static files for frontend build
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-// catch-all route to handle all frontend requests (important for React Router)
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../client/build/index.html'));
-// });
-
-// test the API
-app.use('/testAPI', testAPIRouter);
+// route handlers
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/testAPI', testAPIRouter);
 
 // test client side
-// app.use(express.static(path.join(__dirname, '../client/build')));
 app.post('/client-side-test', (req, res) => {
     const data = req.body.input;
     console.log('Received:', data);
     res.json({ message: "SERVER RECEIVED: " + data});
+});
+
+
+// catch-all route to handle all missed frontend requests
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 // catch 404 and forward to error handler
