@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 function App() {
 
   // creates state variables
@@ -11,7 +13,7 @@ function App() {
 
   // runs function once and makes a GET request to the following link
   useEffect(() => {
-    fetch('http://localhost:5000/testAPI')
+    fetch(`${apiUrl}/testAPI`)
       // converts response into plain text
       .then((res) => res.text())
       // stores response in variable
@@ -24,7 +26,7 @@ function App() {
 
     try {
     // send to server and record response
-    const response = await fetch('http://localhost:5000/client-side-test', {
+    const response = await fetch(`${apiUrl}/client-side-test`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: userInput })
