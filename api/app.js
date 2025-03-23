@@ -19,7 +19,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 app.use(cors({
-    origin: 'https://bit-by-bit-recipes.vercel.app/',
     methods: ['GET', 'POST', 'OPTIONS']
 }));
 app.use(logger('dev'));
@@ -64,10 +63,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500).send(err.message || 'Internal Server Error');
 });
 
-// if deployed, wrap in serverless for Vercel
+// if deployed, export as serverless function
 if (process.env.NODE_ENV === 'production') {
-    const serverless = require('serverless-http');
-    module.exports = serverless(app);
+    module.exports = (req, res) => app(req, res);
   } else {
     module.exports = app;
   }
