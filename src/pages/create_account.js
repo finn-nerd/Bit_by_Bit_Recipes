@@ -3,68 +3,106 @@ import { useRouter } from 'next/router';
 
 function CreateAccount() {
 
-// set up router
-const router = useRouter();
-const handleClick = () => router.push('/login');
+    // variables
+    const [username, setUsername] = useState(''); // stores username
+    const [password, setPassword] = useState(''); // stores username
+    const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
+    const router = useRouter(); // set up router
 
-return (
-    <div className="App">
-        {/* blocks for background aesthetics */}
-        <div className="red-block" style={{top: '0px', left: '0px'}}></div>
-        <div className="red-block" style={{top: '0px', right: '0px'}}></div>
-        <div className="red-block" style={{bottom: '0px', left: '0px'}}></div>
-        <div className="red-block" style={{bottom: '0px', right: '0px'}}></div>
+    // send input to backend/api
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        <div className="red-orange-block" style={{top: '100px', left: '0px'}}></div>
-        <div className="red-orange-block" style={{top: '100px', right: '0px'}}></div>
-        <div className="red-orange-block" style={{bottom: '100px', left: '0px'}}></div>
-        <div className="red-orange-block" style={{bottom: '100px', right: '0px'}}></div>
+        try {
+            // send to server and record response
+            const response = await fetch(`/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            // output response on frontend
+            const data = await response.json(); // parse json stream into object
+            setUserInputResponse(data.message); // extract json "message" field
+        } catch (err) {
+            console.error("Error during fetch:", err);
+            setUserInputResponse("An error occurred while contacting the server.");
+        }
+    };
 
-        <div className="orange-block" style={{top: '230px', left: '0px'}}></div>
-        <div className="orange-block" style={{top: '230px', right: '0px'}}></div>
-        <div className="orange-block" style={{bottom: '230px', left: '0px'}}></div>
-        <div className="orange-block" style={{bottom: '230px', right: '0px'}}></div>
+    const handleClick = () => router.push('/login');
 
-        <header className="App-header">
-            {/* title for page */}
-            <div className="text-wrapper">
-                <h1 className="front-title">Bit by Bit Recipes</h1>
-                <h1 className="back-title">Bit by Bit Recipes</h1>
-            </div>
+    return (
+        <div className="App">
+            {/* blocks for background aesthetics */}
+            <div className="red-block" style={{top: '0px', left: '0px'}}></div>
+            <div className="red-block" style={{top: '0px', right: '0px'}}></div>
+            <div className="red-block" style={{bottom: '0px', left: '0px'}}></div>
+            <div className="red-block" style={{bottom: '0px', right: '0px'}}></div>
 
-            {/* overall text box */}
-            <div className="text-box">
-                {/* welcome box and text */}
-                <div className="welcome-box">
-                    <p className="welcome-text">
-                        Please create an account by entering your new username and password!
-                    </p>
+            <div className="red-orange-block" style={{top: '100px', left: '0px'}}></div>
+            <div className="red-orange-block" style={{top: '100px', right: '0px'}}></div>
+            <div className="red-orange-block" style={{bottom: '100px', left: '0px'}}></div>
+            <div className="red-orange-block" style={{bottom: '100px', right: '0px'}}></div>
+
+            <div className="orange-block" style={{top: '230px', left: '0px'}}></div>
+            <div className="orange-block" style={{top: '230px', right: '0px'}}></div>
+            <div className="orange-block" style={{bottom: '230px', left: '0px'}}></div>
+            <div className="orange-block" style={{bottom: '230px', right: '0px'}}></div>
+
+            <header className="App-header">
+                {/* title for page */}
+                <div className="text-wrapper">
+                    <h1 className="front-title">Bit by Bit Recipes</h1>
+                    <h1 className="back-title">Bit by Bit Recipes</h1>
                 </div>
-                
-                {/* username title and input box */}
-                <p className="user-pass-text">Username</p> 
-                <input 
-                    className="input-field"
-                    placeholder="Enter your username"
-                />
 
-                {/* password title and input box */}
-                <p className="user-pass-text">Password</p>
-                <input
-                    className="input-field"
-                    placeholder="Enter your password"
-                />
-            </div>
+                {/* overall text box */}
+                <div className="text-box">
+                    {/* welcome box and text */}
+                    <div className="welcome-box">
+                        <p className="welcome-text">
+                            Please create an account by entering your new username and password!
+                        </p>
+                    </div>
+                    
+                    {/* username title and input box */}
+                    <p className="user-pass-text">Username</p> 
+                    <input 
+                        type="username"
+                        value={username} // contains username
+                        onChange={(e) => setUsername(e.target.value)} 
+                        className="input-field"
+                        placeholder="Enter your username"
+                    />
 
-            {/* submit button to check user authentication*/}
-            <form className="form-box">
-                <button className="button-box" type="submit" onClick={handleClick}>
-                    Return of Login Page
-                </button>
-            </form>
-        </header>
-    </div>
-);
+                    {/* password title and input box */}
+                    <p className="user-pass-text">Password</p>
+                    <input
+                        type="password"
+                        value={password} // contains password
+                        onChange={(e) => setPassword(e.target.value)} 
+                        className="input-field"
+                        placeholder="Enter your password"
+                    />
+
+                    {/* submit button to check user authentication*/}
+                    <form className="form-box" onSubmit={handleSubmit}>
+                        {/* submit button to check user authentication*/}
+                        <button className="smaller-button" type="submit">
+                            Submit your new username and password!
+                        </button>
+                    </form>
+                </div>
+
+                {/* submit button to check user authentication*/}
+                <form className="form-box">
+                    <button className="button-box" type="submit" onClick={handleClick}>
+                        Return of Login Page
+                    </button>
+                </form>
+            </header>
+        </div>
+    );
 
 
 }

@@ -68,7 +68,7 @@ function Login() {
                 </div>
 
                 {/* button to go to create account page */}
-                <button className="create-acct-button" type="button" onClick={handleClick}>
+                <button className="smaller-button" type="button" onClick={handleClick}>
                     If you're new, please create an account by clicking here!
                 </button>
                 
@@ -97,7 +97,7 @@ function Login() {
             <form className="form-box" onSubmit={handleSubmit}>
                 {/* submit button to check user authentication*/}
                 <button className="button-box" type="submit">
-                    Submit
+                    Login
                 </button>
             </form>
 
