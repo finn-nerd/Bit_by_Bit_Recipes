@@ -11,6 +11,22 @@ const handleClick = () => navigate('/');
 
 return (
     <div className="App">
+        {/* blocks for background aesthetics */}
+        <div className="red-block" style={{top: '0px', left: '0px'}}></div>
+        <div className="red-block" style={{top: '0px', right: '0px'}}></div>
+        <div className="red-block" style={{bottom: '0px', left: '0px'}}></div>
+        <div className="red-block" style={{bottom: '0px', right: '0px'}}></div>
+
+        <div className="red-orange-block" style={{top: '100px', left: '0px'}}></div>
+        <div className="red-orange-block" style={{top: '100px', right: '0px'}}></div>
+        <div className="red-orange-block" style={{bottom: '100px', left: '0px'}}></div>
+        <div className="red-orange-block" style={{bottom: '100px', right: '0px'}}></div>
+
+        <div className="orange-block" style={{top: '230px', left: '0px'}}></div>
+        <div className="orange-block" style={{top: '230px', right: '0px'}}></div>
+        <div className="orange-block" style={{bottom: '230px', left: '0px'}}></div>
+        <div className="orange-block" style={{bottom: '230px', right: '0px'}}></div>
+
         <header className="App-header">
             {/* title for page */}
             <div className="text-wrapper">
@@ -30,15 +46,15 @@ return (
                 {/* username title and input box */}
                 <p className="user-pass-text">Username</p> 
                 <input 
-                className="input-field"
-                placeholder="Enter your username"
+                    className="input-field"
+                    placeholder="Enter your username"
                 />
 
                 {/* password title and input box */}
                 <p className="user-pass-text">Password</p>
                 <input
-                className="input-field"
-                placeholder="Enter your password"
+                    className="input-field"
+                    placeholder="Enter your password"
                 />
             </div>
 
