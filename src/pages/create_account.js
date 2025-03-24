@@ -39,8 +39,8 @@ function CreateAccount() {
     return (
         <div className="App">
             {/* floating pizza */}
-            <img className="floating pizza" style={{top: '50px', left: '550px'}} src="/pizza.png" alt="Pizza" />
-            <img className="floating pizza" style={{top: '50px', right: '550px'}} src="/pizza.png" alt="Pizza" />
+            <img className="floating pizza" style={{top: '50px', left: '500px'}} src="/pizza.png" alt="Pizza" />
+            <img className="floating pizza" style={{top: '50px', right: '500px'}} src="/pizza.png" alt="Pizza" />
 
             {/* blocks for background aesthetics */}
             <div className="red-block" style={{top: '0px', left: '0px'}}></div>
