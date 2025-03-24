@@ -45,25 +45,30 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {/* title for homepage */}
         <div className="text-wrapper">
           <h1 className="front-title">Bit by Bit Recipes</h1>
           <h1 className="back-title">Bit by Bit Recipes</h1>
         </div>
 
+        {/* overall text box */}
         <div className="text-box">
+          {/* welcome box and text */}
           <div className="welcome-box">
             <p className="welcome-text">Welcome! Please enter your username and password! (:</p>
           </div>
-
+          
+          {/* username title and input box */}
           <p className="user-pass-text">Username</p> 
           <input 
             type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
+            value={userInput} // contains user input
+            onChange={(e) => setUserInput(e.target.value)} 
             className="input-field"
             placeholder="Enter your username"
           />
 
+          {/* password title and input box */}
           <p className="user-pass-text">Password</p>
           <input
             className="input-field"
@@ -71,13 +76,15 @@ function App() {
           />
         </div>
 
+        {/* submit button */}
         <form className="form-box" onSubmit={handleSubmit}>
           <button className="button-box" type="submit">
             Submit
           </button>
         </form>
 
-        <h1>User Input Response: {userInputResponse}</h1>
+        {/* outputs success or not for user authentication */}
+        <h1>User Authentication: {userInputResponse}</h1>
       </header>
     </div>
   );

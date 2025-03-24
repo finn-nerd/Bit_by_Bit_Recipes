@@ -13,40 +13,45 @@
   }
 }
 
+/* overall app background */
 .App-header {
   background: linear-gradient(to bottom, #EDB376, #F48346);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* align items vertically */
+  justify-content: center; /* align items horizontally */
   font-family: "Jersey 10";
   font-size: calc(10px + 2vmin);
-  letter-spacing: 2px;
+  letter-spacing: 2px; /* spacing between letters */
   color: white;
 }
 
+/* used as a simple wrapper for the title texts */
 .text-wrapper {
   position: relative;
   display: inline-block;
 }
 
+/* shadow of title */
 .back-title {
   position: absolute;
   color: #D35E2C;
   top: 5px;
   right: 5px;
-  z-index: 0;
+  z-index: 0; /* determines order/stack of items */
   font-size: 70px;
   white-space: nowrap;
 }
 
+/* actual title */
 .front-title {
   position: relative;
-  z-index: 1;
+  z-index: 1; /* determines order/stack of items */
   font-size: 70px;
 }
 
+/* contains rest of components */
 .text-box {
   background-color: #F18D5E;
   border: 8px solid #D45114;
@@ -57,11 +62,13 @@
   margin: 0 auto 50px auto;
 }
 
+/* for welcome text */
 .welcome-text {
   font-size: 35px;
   margin-top: 0px;
 }
 
+/* for box that contains welcome text */
 .welcome-box {
   background-color: #E65340;
   border: 4px solid #C13737;
@@ -72,11 +79,13 @@
   margin: 0 auto 0 auto;
 }
 
+/* for username/password text */
 .user-pass-text {
   font-size: 35px;
   line-height: 1px;
 }
 
+/* for username/password input box */
 .form-box {
   display: flex;
   justify-content: center;
@@ -84,6 +93,7 @@
   align-items: center;
 }
 
+/* text of what user types in input box */
 .input-field {
   background-color: #F3E0A9;
   border: 3px solid #D28B4E;
@@ -96,6 +106,7 @@
   text-align: center;
 }
 
+/* placeholder text inside input box */
 .input-field::placeholder {
   font-family: 'Jersey 10';
   font-size: 25px;
@@ -104,6 +115,7 @@
   text-align: center;
 }
 
+/* button */
 .button-box {
   background-color: #EB4B4B;
   border: 6px solid #B21F1F;
@@ -112,10 +124,12 @@
   width: 300px;
   height: 90px;
   
+  /* display of text inside box */
   display: flex;
   align-items: center;
   justify-content: center;
 
+  /* text */
   font-family: 'Jersey 10';
   font-size: 55px;
   color: white;
