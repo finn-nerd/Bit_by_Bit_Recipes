@@ -1,3 +1,14 @@
+/* Template file used to apply CSS to specific page
+
+To use, change "page" in file name to desired page (i.e., index.module.css for index.js).
+Then, in the appropriate page.js (i.e., index.js), add:
+
+    import styles from './page.module.css';
+~
+changing the "page" part of address as appropriate.
+*/
+
+
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
