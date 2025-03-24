@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // set routing api, or let vercel handle local routing
-const apiUrl = process.env.REACT_APP_API_URL || "";
 
 function Login() {
 
@@ -13,24 +12,13 @@ function Login() {
     const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
     const router = useRouter(); // used to navigate to diff pages
 
-    /* used to confirm connection between frontend/backend
-    // runs function once and makes a GET request to the following link
-    useEffect(() => {
-    fetch(`${apiUrl}/api/testAPI`)
-        // converts response into plain text
-        .then((res) => res.text())
-        // stores response in variable
-        .then((res) => setApiResponse(res));
-    }, []);
-    */
-
     // send input to backend/api
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             // send to server and record response
-            const response = await fetch(`${apiUrl}/api/login`, {
+            const response = await fetch(`/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
