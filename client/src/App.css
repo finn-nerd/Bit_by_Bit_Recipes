@@ -58,7 +58,7 @@
   border-radius: 20px;
   padding: 20px;
   width: 800px;
-  height: 380px;
+  height: auto;
   margin: 0 auto 50px auto;
 }
 
@@ -76,7 +76,28 @@
   padding: 20px;
   width: 650px;
   height: 70px;
+  margin: 0 auto 20px auto;
+}
+
+/* for the button that leads to the create account page */
+.create-acct-button {
+  background-color: #EB4B4B;
+  border: 4px solid #B21F1F;
+  border-radius: 10px;
+  padding: 20px;
+  width: 550px;
+  height: 50px;
   margin: 0 auto 0 auto;
+
+  /* display of text inside box */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* text */
+  font-family: 'Jersey 10';
+  font-size: 25px;
+  color: white;
 }
 
 /* for username/password text */
@@ -121,8 +142,8 @@
   border: 6px solid #B21F1F;
   border-radius: 20px;
   padding: 20px;
-  width: 300px;
-  height: 90px;
+  width: auto;
+  height: auto;
   
   /* display of text inside box */
   display: flex;

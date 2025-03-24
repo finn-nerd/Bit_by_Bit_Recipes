@@ -9,7 +9,8 @@ function LoginPage() {
 
     // variables
     // const [apiResponse, setApiResponse] = useState('');
-    const [userInput, setUserInput] = useState(''); // stores user input
+    const [username, setUsername] = useState(''); // stores username
+    const [password, setPassword] = useState(''); // stores username
     const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
     const navigate = useNavigate(); // used to navigate to diff pages
 
@@ -33,7 +34,7 @@ function LoginPage() {
     const response = await fetch(`${apiUrl}/api/client-side-test`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input: userInput })
+        body: JSON.stringify({ username, password })
     });
 
     // output response on frontend
@@ -63,35 +64,44 @@ function LoginPage() {
                 <div className="welcome-box">
                     <p className="welcome-text">Welcome! Please enter your username and password! (:</p>
                 </div>
+
+                {/* button to go to create account page */}
+                <button className="create-acct-button" type="button" onClick={handleClick}>
+                    If you're new, please create an account by clicking here!
+                </button>
                 
                 {/* username title and input box */}
                 <p className="user-pass-text">Username</p> 
                 <input 
-                type="text"
-                value={userInput} // contains user input
-                onChange={(e) => setUserInput(e.target.value)} 
-                className="input-field"
-                placeholder="Enter your username"
+                    type="username"
+                    value={username} // contains username
+                    onChange={(e) => setUsername(e.target.value)} 
+                    className="input-field"
+                    placeholder="Enter your username"
                 />
 
                 {/* password title and input box */}
                 <p className="user-pass-text">Password</p>
                 <input
-                className="input-field"
-                placeholder="Enter your password"
+                    type="password"
+                    value={password} // contains password
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="input-field"
+                    placeholder="Enter your password"
                 />
             </div>
 
             {/* submit button to check user authentication*/}
             <form className="form-box" onSubmit={handleSubmit}>
                 {/* submit button to check user authentication*/}
-                <button className="button-box" type="submit" onClick={handleClick}>
+                <button className="button-box" type="submit">
                     Submit
                 </button>
             </form>
 
             {/* outputs success or not for user authentication */}
-            <h1>User Authentication: {userInputResponse}</h1>
+            {/* marginTop is for style/structure on page and i dont want to create a css class for this */}
+            <h1 style={{marginTop: '30px'}}>User Authentication: {userInputResponse}</h1>
         </header>
     </div>
     );

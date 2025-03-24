@@ -37,9 +37,10 @@ app.use('/api/testAPI', testAPIRouter);
 
 // test client side
 app.post('/api/client-side-test', (req, res) => {
-    const data = req.body.input;
-    console.log('Received:', data);
-    res.json({ message: "SERVER RECEIVED: " + data});
+    const { username, password } = req.body;
+    console.log('Received:', username);
+    console.log('Received:', password);
+    res.json({ message: 'SERVER RECEIVED: ' + username + ' / ' + password});
 });
 
 

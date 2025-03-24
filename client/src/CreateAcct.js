@@ -22,7 +22,9 @@ return (
             <div className="text-box">
                 {/* welcome box and text */}
                 <div className="welcome-box">
-                    <p className="welcome-text">create acct</p>
+                    <p className="welcome-text">
+                        Please create an account by entering your new username and password!
+                    </p>
                 </div>
                 
                 {/* username title and input box */}
@@ -43,7 +45,7 @@ return (
             {/* submit button to check user authentication*/}
             <form className="form-box">
                 <button className="button-box" type="submit" onClick={handleClick}>
-                    Submit
+                    Return of Login Page
                 </button>
             </form>
         </header>
