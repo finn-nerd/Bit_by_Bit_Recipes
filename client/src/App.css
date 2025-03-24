@@ -53,8 +53,8 @@
 
 /* contains rest of components */
 .text-box {
-  background-color: #F18D5E;
-  border: 8px solid #D45114;
+  background: linear-gradient(to bottom, #F18D5E, #EF6F34);
+  border: 8px solid #C13D00;
   border-radius: 20px;
   padding: 20px;
   width: 800px;
