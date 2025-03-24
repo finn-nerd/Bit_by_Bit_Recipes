@@ -12,23 +12,28 @@ function CreateAccount() {
     // send input to backend/api
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      
         try {
-            // send to server and record response
-            const response = await fetch(`/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            // output response on frontend
-            const data = await response.json(); // parse json stream into object
-            setUserInputResponse(data.message); // extract json "message" field
+          // Send registration data to the registration endpoint
+          const response = await fetch('/api/create_account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await response.json();
+          
+          if (response.status === 201) {
+            // Account was created successfully, so redirect to the login page
+            router.push('/login');
+          } else {
+            setUserInputResponse(data.message || 'Failed to create account.');
+          }
         } catch (err) {
-            console.error("Error during fetch:", err);
-            setUserInputResponse("An error occurred while contacting the server.");
+          console.error("Error during fetch:", err);
+          setUserInputResponse("An error occurred while contacting the server.");
         }
-    };
-
+      };
+      
     const handleClick = () => router.push('/login');
 
     return (

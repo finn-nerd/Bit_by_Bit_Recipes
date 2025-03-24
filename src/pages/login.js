@@ -15,22 +15,28 @@ function Login() {
     // send input to backend/api
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      
         try {
-            // send to server and record response
-            const response = await fetch(`/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            // output response on frontend
-            const data = await response.json(); // parse json stream into object
-            setUserInputResponse(data.message); // extract json "message" field
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await response.json();
+          
+          // Login successful
+          if (response.ok) {
+            setUserInputResponse(data.message);
+            // redirect to home page here (when ready)
+          } else {
+            setUserInputResponse(data.message || 'Login failed');
+          }
         } catch (err) {
-            console.error("Error during fetch:", err);
-            setUserInputResponse("An error occurred while contacting the server.");
+          console.error("Error during fetch:", err);
+          setUserInputResponse("An error occurred while contacting the server.");
         }
-    };
+      };
+      
 
     // used to navigate to diff page
     const handleClick = () => router.push('/create_account');
