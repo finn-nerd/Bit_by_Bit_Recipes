@@ -1,4 +1,5 @@
 /* Currently unused, but included in template so I kept it */
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
