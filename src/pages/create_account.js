@@ -23,8 +23,8 @@ function CreateAccount() {
           const data = await response.json();
           
           if (response.status === 201) {
-            // Account was created successfully, so redirect to the login page
-            router.push('/login');
+            // Account was created successfully
+            setUserInputResponse("Account created successfully!");
           } else {
             setUserInputResponse(data.message || 'Failed to create account.');
           }
@@ -38,77 +38,88 @@ function CreateAccount() {
 
     return (
         <div className="App">
-            {/* floating pizza */}
-            <img className="floating pizza" style={{top: '100px', left: '500px'}} src="/pizza.png" alt="Pizza" />
-            <img className="floating pizza" style={{top: '100px', right: '500px'}} src="/pizza.png" alt="Pizza" />
-
             {/* blocks for background aesthetics */}
-            <div className="red-block" style={{top: '0px', left: '0px'}}></div>
-            <div className="red-block" style={{top: '0px', right: '0px'}}></div>
-            <div className="red-block" style={{bottom: '0px', left: '0px'}}></div>
-            <div className="red-block" style={{bottom: '0px', right: '0px'}}></div>
+            <div className="fixed top-0 left-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+            <div className="fixed top-0 right-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+            <div className="fixed bottom-0 left-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+            <div className="fixed bottom-0 right-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
 
-            <div className="red-orange-block" style={{top: '100px', left: '0px'}}></div>
-            <div className="red-orange-block" style={{top: '100px', right: '0px'}}></div>
-            <div className="red-orange-block" style={{bottom: '100px', left: '0px'}}></div>
-            <div className="red-orange-block" style={{bottom: '100px', right: '0px'}}></div>
+            <div className="fixed top-[10%] left-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+            <div className="fixed top-[10%] right-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+            <div className="fixed bottom-[10%] left-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+            <div className="fixed bottom-[10%] right-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
 
-            <div className="orange-block" style={{top: '230px', left: '0px'}}></div>
-            <div className="orange-block" style={{top: '230px', right: '0px'}}></div>
-            <div className="orange-block" style={{bottom: '230px', left: '0px'}}></div>
-            <div className="orange-block" style={{bottom: '230px', right: '0px'}}></div>
+            <div className="fixed top-[25%] left-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+            <div className="fixed top-[25%] right-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+            <div className="fixed bottom-[25%] left-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+            <div className="fixed bottom-[25%] right-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
 
             <header className="App-header">
-                {/* title for page */}
-                <div className="text-wrapper">
-                    <h1 className="front-title">Bit by Bit Recipes</h1>
-                    <h1 className="back-title">Bit by Bit Recipes</h1>
+                <div className="relative flex items-center justify-center">
+                    {/* left floating pizza */}
+                    <img className="absolute left-[-60px] sm:left-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+                    src="/pizza.png" 
+                    alt="Pizza"/>
+                    
+                    {/* title for page */}
+                    <div className="relative inline-block">
+                        <h1 className="relative z-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[70px] font-['Jersey_10']">Bit by Bit Recipes</h1>
+                        <h1 className="absolute z-0 text-[#D35E2C] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[70px] whitespace-nowrap top-[0.1em] right-[0.1em] font-['Jersey_10']">Bit by Bit Recipes</h1>
+                    </div>
+
+                    {/* right floating pizza */}
+                    <img className="absolute right-[-60px] sm:right-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+                    src="/pizza.png" 
+                    alt="Pizza"/>
                 </div>
 
-                {/* overall text box */}
-                <div className="text-box">
-                    {/* welcome box and text */}
-                    <div className="welcome-box">
-                        <p className="welcome-text">
+                    {/* overall text box */}
+                    <div className="w-full sm:w-[90%] md:w-[75%] lg:w-[60%] xl:w-[45%] max-w-[800px] h-auto mt-5 mb-5 mx-auto p-5 rounded-[20px] border-8 border-solid border-[#C13D00] bg-gradient-to-b from-[#f18d5e] to-[#ef6f34]">
+                        {/* welcome box and text */}
+                        <div className="bg-[#E65340] w-full sm:w-[90%] md:w-[75%] lg:w-[650px] h-auto m-auto p-4 rounded-[10px] border-4 border-solid border-[#C13737]">
+                            <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] mt-0 text-center">
                             Please create an account by entering your new username and password!
                         </p>
                     </div>
                     
                     {/* username title and input box */}
-                    <p className="user-pass-text">Username</p> 
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] leading-tight">Username</p> 
                     <input 
                         type="username"
                         value={username} // contains username
                         onChange={(e) => setUsername(e.target.value)} 
-                        className="input-field"
+                        className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Enter your username"
                     />
 
                     {/* password title and input box */}
-                    <p className="user-pass-text">Password</p>
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] leading-tight">Password</p>
                     <input
                         type="password"
                         value={password} // contains password
                         onChange={(e) => setPassword(e.target.value)} 
-                        className="input-field"
+                        className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Enter your password"
                     />
 
-                    {/* submit button to check user authentication*/}
-                    <form className="form-box" onSubmit={handleSubmit}>
-                        {/* submit button to check user authentication*/}
-                        <button className="smaller-button" type="submit">
+                    {/* submit button to check user authentication */}
+                    <form className="flex justify-center flex-col items-center" 
+                    onSubmit={handleSubmit}>
+                        <button className="bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-lg md:text-xl lg:text-[25px] text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']"
+                         type="submit">
                             Submit your new username and password!
                         </button>
                     </form>
                 </div>
 
-                {/* submit button to check user authentication*/}
-                <form className="form-box">
-                    <button className="button-box" type="submit" onClick={handleClick}>
-                        Return of Login Page
+                {/* click button to return to login page */}
+                <div className="flex justify-center flex-col items-center">
+                    <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                     type="button" 
+                     onClick={handleClick}>
+                        Return to Login Page
                     </button>
-                </form>
+                </div>
             </header>
         </div>
     );
