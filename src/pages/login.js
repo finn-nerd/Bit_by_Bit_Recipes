@@ -28,6 +28,7 @@ function Login() {
           if (response.ok) {
             setUserInputResponse(data.message);
             // redirect to home page here (when ready)
+            router.push('/homepage')
           } else {
             setUserInputResponse(data.message || 'Login failed');
           }

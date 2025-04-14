@@ -13,6 +13,7 @@ html, body, #root {
   text-align: center;
   min-height: 100vh;
   overflow: hidden;
+  letter-spacing: 2px; /* spacing between letters */
 }
 
 .App-logo {
@@ -35,7 +36,6 @@ html, body, #root {
   justify-content: center; /* align items horizontally */
   font-family: "Jersey 10";
   font-size: calc(10px + 2vmin);
-  letter-spacing: 2px; /* spacing between letters */
   color: white;
   position: relative; /* needed in order to use z-index */
   z-index: 1; /* so that content is in front of blocks */

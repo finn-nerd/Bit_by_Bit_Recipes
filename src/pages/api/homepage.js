@@ -1,0 +1,1 @@
+// receive search_input from homepage and return recipes w/ the name
