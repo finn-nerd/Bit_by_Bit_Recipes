@@ -7,16 +7,40 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: `Method ${method} not allowed` });
   }
 
-  const { category } = req.query;
+  const { recipe } = req.query;
+  
+  let list = [];
 
-  // Choose the correct endpoint based on the query
-  const endpoint = category
-    ? `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
-    : `https://www.themealdb.com/api/json/v1/1/search.php?s=`;
+  if (recipe) {
+    list = [
+      `https://www.themealdb.com/api/json/v1/1/filter.php?c=${recipe}`, // search for a specific category
+      `https://www.themealdb.com/api/json/v1/1/filter.php?a=${recipe}`, // saerch for a specific area
+      `https://www.themealdb.com/api/json/v1/1/filter.php?i=${recipe}` // search for a specific ingredient(s)
+    ];
+  } else {
+    list = [`https://www.themealdb.com/api/json/v1/1/search.php?s=`];
+  }
+
+  let data = null;
 
   try {
-    const response = await fetch(endpoint);
-    const data = await response.json();
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`);
+    const result = await response.json();
+
+    if (result.meals && result.meals[0].strMeal.toLowerCase() === recipe.toLowerCase()) {
+      data = result;
+    } else {
+      for (const i of list) {
+        const response = await fetch(i);
+        const result = await response.json();
+    
+        // if find a valid result, break
+        if (result && result.meals) {
+          data = result;
+          break;
+        }
+      }
+    }
 
     if (!data || data.meals === null) {
       return res.status(404).json({ message: 'No meals found.' });
