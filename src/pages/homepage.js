@@ -9,10 +9,20 @@ function Homepage() {
   const router = useRouter();
 
   // Fetch meal data from backend
-  const fetchMeals = async (query = "chicken") => {
+  const fetchMeals = async (query = 'chicken') => {
     setLoading(true);
     try {
       const res = await fetch(`/api/meals?category=${query}`);
+
+      // if category doesn't exist
+      if (!res.ok) {
+        const error = await res.json();
+        setUserInputResponse(error.message || 'No meals found.');
+        setMeals([]);
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
       setMeals(data.meals || []);
     } catch (err) {
@@ -28,23 +38,7 @@ function Homepage() {
 
   const handleEnter = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('/api/homepage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ search_input })
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        setUserInputResponse('Successful search attempt!');
-      } else {
-        setUserInputResponse(data.message || 'Failed to search a recipe.');
-      }
-    } catch (err) {
-      console.error("Error during fetch:", err);
-      setUserInputResponse("An error occurred while contacting the server.");
-    }
+    fetchMeals(search_input);
   };
 
   const handleClick = () => router.push('/login');
@@ -98,7 +92,7 @@ function Homepage() {
             </div>
           ))
         ) : (
-          <p className="text-white text-2xl font-bold">No meals found</p>
+          <p className="text-white text-2xl font-bold">{userInputResponse}</p>
         )}
       </div>
 
