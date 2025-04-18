@@ -56,7 +56,7 @@ function Sidebar({ isOpen, isClose}) {
                         {/* Return to login button */}
                         <div className="flex justify-center flex-col items-center my-10">
                             <button
-                                className="bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-[30px] p-5 rounded-[20px] border-[6px] border-[#B21F1F] font-['Jersey_10']"
+                                className="w-[80%] sm:w-[20%] md:w-[40%] lg:w-[60%] xl:w-[80%] bg-[#EB4B4B] text-white text-xl sm:text-2xl md:text-3xl lg:text-[30px] p-5 rounded-[20px] border-[6px] border-[#B21F1F] font-['Jersey_10']"
                                 type="button"
                                 onClick={handleClick}
                             >
