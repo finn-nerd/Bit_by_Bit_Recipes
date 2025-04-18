@@ -128,7 +128,7 @@ function Login() {
 
           {/* outputs success or not for user authentication */}
           {/* marginTop is for style/structure on page and i dont want to create a css class for this */}
-          <h1 style={{marginTop: '30px'}}>User Authentication: {userInputResponse}</h1>
+          {/* <h1 style={{marginTop: '30px'}}>User Authentication: {userInputResponse}</h1> */}
         </header>
     </div>
     );
