@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Sidebar from '../../components/sidebar'
 
-function Homepage() {
+function Home() {
   const [search_input, setSearch_Input] = useState('');
   const [userInputResponse, setUserInputResponse] = useState('');
   const [meals, setMeals] = useState([]);
@@ -109,4 +109,4 @@ function Homepage() {
 
 }
 
-export default Homepage;
+export default Home;
