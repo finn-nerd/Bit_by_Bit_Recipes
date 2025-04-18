@@ -47,16 +47,7 @@ function Recipe({ meal }) {
                 </div>
             </div>
 
-            {/*
-                --- Placeholder Data ---
-                See the API to find all values of meal json to see what can be displayed
-                Should display at least:
-                - Categories (as tags below title, possibly)
-                - Any other important info as you deem fit when u set up frontend
-
-                https://www.themealdb.com/api.php
-            */}
-
+            {/* Rest of page */}
             <div className="pt-[150px] px-10">
                 <div className="flex flex-col lg:flex-row gap-20">
 
