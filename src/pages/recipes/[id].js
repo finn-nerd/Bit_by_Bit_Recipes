@@ -55,20 +55,36 @@ function Recipe({ meal }) {
                     <div className="w-full lg:w-1/3 flex flex-col justify-start items-center px-5">
 
                         {/* Image */}
-                        <img className="w-full object-cover rounded-[12px]"
+                        <img className="w-full object-cover rounded-[12px] mb-5"
                         src={meal.strMealThumb} alt={meal.strMeal} />
+ 
+
+                        {/* Video */}
+                        {meal.strYoutube && (
+                        <iframe
+                            className="w-full aspect-video my-15 rounded-xl"
+                            src={meal.strYoutube.replace("watch?v=", "embed/")}
+                            title="Video Instructions"
+                            allowFullScreen
+                        />
+                        )}
+
+                    </div>
+
+                    {/* Right side */}
+                    <div className="w-full lg:w-2/3 text-justify">
 
                         {/* Title */}
-                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[50px] mt-5 font-['Jersey_10']">{meal.strMeal}</h1>
+                        <h1 className="text-left text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[50px] mt-5 font-['Jersey_10']">{meal.strMeal}</h1>
 
+                        {/* Meta Info */}
                         <div className="flex flex-wrap jusitfy-center gap-5 mt-3">
                             {/* Category */}
-                            <h2 className="bg-[#E96629] text-white p-5 rounded-full text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[30px] font-['Jersey_10']">Category: {meal.strCategory}</h2>
+                            <h2 className="bg-[#E96629] text-white p-3 rounded-full text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-[20px] font-['Jersey_10']">Category: {meal.strCategory}</h2>
 
                             {/* Area */}
-                            <h2 className="bg-[#E75830] text-white p-5 rounded-full text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[30px] font-['Jersey_10']">Area: {meal.strArea}</h2>
+                            <h2 className="bg-[#E75830] text-white p-3 rounded-full text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-[20px] font-['Jersey_10']">Area: {meal.strArea}</h2>
                         </div>
-
 
                         {/* Tags */}
                         {meal.strTags && ( // checks whether tags exist for this recipe to display it
@@ -76,17 +92,12 @@ function Recipe({ meal }) {
                                 {meal.strTags.split(',').map(tag => (
                                     <span
                                     key={tag}
-                                    className="bg-[#E25046] text-white p-3 rounded-full text-xl sm:text-2xl xl:text-[25px] mt-5 font-['Jersey_10']">
+                                    className="bg-[#E25046] text-white p-2 rounded-full text-xl sm:text-2xl xl:text-[18px] mt-5 font-['Jersey_10']">
                                         #{tag.trim()}
                                     </span>
                                 ))}
                             </div>
                         )}
-
-                    </div>
-
-                    {/* Right side */}
-                    <div className="w-full lg:w-2/3 text-justify">
 
                         {/* Ingredient title */}
                         <h2 className="text-left text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] py-5 font-['Jersey_10']">Ingredients</h2>
@@ -116,13 +127,7 @@ function Recipe({ meal }) {
                                 </p>
                             ))}
                         </div>
-
-                        {/* Video Instructions */}
-                        <a className="block text-[#3971E8] text-left text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] mb-10 font-['Jersey_10'] hover:underline"
-                        href={meal.strYoutube}>Video Instructions</a>
-                 
                     </div>
-
                 </div>
             </div>
         </div>
