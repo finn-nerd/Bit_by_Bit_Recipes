@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Sidebar from '../../components/sidebar'
 
 function Home() {
+  const router = useRouter();
   const [search_input, setSearch_Input] = useState('');
   const [userInputResponse, setUserInputResponse] = useState('');
   const [meals, setMeals] = useState([]);
@@ -41,6 +42,10 @@ function Home() {
     e.preventDefault();
     fetchMeals(search_input);
   };
+
+  const handleRedirect = (recipeID) => {
+    router.push(`/recipes/${recipeID}`);
+  }
 
   const toggleSidebar = () => setOpenSidebar(!openSidebar);
   const closeSidebar = () => setOpenSidebar(false);
@@ -86,7 +91,8 @@ function Home() {
           meals.map((meal) => (
             <div
               key={meal.idMeal}
-              className="aspect-[4/3] w-[280px] p-5 rounded-[20px] bg-[#E76A30] border-[4px] border-[#C13D00] text-center"
+              onClick={() => handleRedirect(meal.idMeal)}
+              className="cursor-pointer aspect-[4/3] w-[280px] p-5 rounded-[20px] bg-[#E76A30] border-[4px] border-[#C13D00] text-center"
             >
               <img
                 src={meal.strMealThumb}
