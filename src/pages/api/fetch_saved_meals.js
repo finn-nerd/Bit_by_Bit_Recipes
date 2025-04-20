@@ -1,3 +1,11 @@
+import { Pool } from 'pg';
+import getUserFromReq from './auth';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
 export default async function handler(req, res) {
     const { method } = req;
 
@@ -6,7 +14,22 @@ export default async function handler(req, res) {
     }
 
     // get saved recipes from database
-    let saved_list = ['52772', '52874', '52959']
+  let saved_list;
+  try {
+    // authenticate the user and get their ID
+    const user = await getUserFromReq(req);
+    // fetch all recipe_ids they’ve saved
+    const { rows } = await pool.query(
+      `SELECT recipe_id
+         FROM saved_recipes
+        WHERE user_id = $1`,
+      [user.id]
+    );
+    saved_list = rows.map(r => r.recipe_id);
+  } catch (err) {
+    // auth error or DB error
+    return res.status(err.status || 401).json({ error: err.message });
+  }
 
     try {
         let return_list = [] // used to return list of recipes
@@ -14,8 +37,10 @@ export default async function handler(req, res) {
         for (const i of saved_list) {
             const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${i}`); // obtain recipes based on id
             const result = await response.json();
-            
-            return_list.push(result.meals[0]);
+
+            if (result.meals && result.meals[0]) {
+              return_list.push(result.meals[0]);
+            }
             
         }
   

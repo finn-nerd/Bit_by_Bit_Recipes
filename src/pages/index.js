@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
 
-function Index() {
-    const router = useRouter();
+export async function getServerSideProps(ctx) {
+  // Read cookies on the server
+  const { token } = parseCookies(ctx);
 
-    useEffect(() => {
-        // upon page loading, redirect straight to login
-        router.push('/login');
-    }, [router]);
-
-    // right now, returns nothing to "actual" homepage
-    // should probably put SOMETHING here, but for now login is the starter page
-    return null;
+  return {
+    redirect: {
+      destination: token ? '/home' : '/login',
+      permanent: false,
+    },
+  };
 }
 
-export default Index;
+export default function Index() {
+    return null;
+  };
