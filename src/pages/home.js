@@ -92,14 +92,18 @@ function Home() {
             <div
               key={meal.idMeal}
               onClick={() => handleRedirect(meal.idMeal)}
-              className="cursor-pointer aspect-[4/3] w-[280px] p-5 rounded-[20px] bg-[#E76A30] border-[4px] border-[#C13D00] text-center"
+              className="cursor-pointer flex flex-col h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center"
             >
-              <img
+              <div className="flex-1" style={{ height: '65%' }}>
+                <img
                 src={meal.strMealThumb}
                 alt={meal.strMeal}
-                className="w-full h-40 object-cover rounded-[12px] mb-3"
-              />
-              <p className="text-white font-['Jersey_10'] text-xl">{meal.strMeal}</p>
+                className="w-full h-full object-cover rounded-t-[12px]"
+                />
+              </div>
+              <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
+                <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
+              </div>
             </div>
           ))
         ) : (
