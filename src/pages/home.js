@@ -19,28 +19,55 @@ function Home() {
 
     // Find currently favorited meals
     const fetchSavedMeals = async () => {
-        // TODO:
-        // find all favorite meal ids
-        // populate the 'favorites' list with it
-
-        // dummy data for now
-        setSavedMeals(['52772', '52874', '52913']);
+        try {
+            const res = await fetch('/api/fetch_saved_meals');
+            if (!res.ok) throw new Error(await res.text());
+            const { saved_meals } = await res.json();
+            setSavedMeals(saved_meals.map(m => m.mealID));
+        } catch (err) {
+            console.error('Could not load saved recipes:', err);
+        }
     };
 
     // Favorite a meal
     const toggleSavedMeal = (meal) => {
+        // Update local copy of saved IDs
         const isNowSaved = !savedMeals.includes(meal.idMeal)
         setSavedMeals((prev) =>
             isNowSaved ? [...prev, meal.idMeal] : prev.filter((id) => id !== meal.idMeal)
         );
-
-        console.log(`SAVED ${meal.idMeal}: ${isNowSaved}`);
-        // TODO:
-        // update backend copy of favorites list
-        // if (isNowFav) --> add it to db
-        // else --> delete it from db
-        // make sure to include {meal.idMeal}, {meal.strMeal}, and {meal.strMealThumb}
+        // Update DB
+        updateSavedMeals(meal.idMeal, meal.strMeal, meal.strMealThumb, isNowSaved);
     };
+
+    const updateSavedMeals = async (mealID, mealName, mealThumbnail, mealIsSaved) => {
+        try {
+            const res = await fetch('/api/update_saved_meals', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mealID,         // ID of the meal
+                    mealName,       // Name of the meal
+                    mealThumbnail,  // Thumbnail image URL
+                    mealIsSaved     // Boolean or string representing if the meal is saved
+                }),
+            });
+    
+            // Handle non-OK response
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+    
+            const data = await res.json();
+            console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"
+    
+        } catch (err) {
+            console.error('Error saving meal:', err);
+        }
+    }
 
   // Fetch meal data from backend
   const fetchMeals = async (query = 'chicken') => {
