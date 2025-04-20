@@ -50,6 +50,8 @@ function Home() {
   const toggleSidebar = () => setOpenSidebar(!openSidebar);
   const closeSidebar = () => setOpenSidebar(false);
 
+  const handleClick = () => router.push(`/my_kitchen`)
+
   return (
     <div className="App">
 
@@ -78,7 +80,11 @@ function Home() {
             placeholder="Search for a recipe here..."
           />
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] mx-3 text-white font-['Jersey_10']">My Kitchen</h1>
+          <button 
+          onClick={handleClick}
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] mx-3 text-white font-['Jersey_10']">
+            My Kitchen
+          </button>
         </div>
       </div>
 
