@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: `Method ${method} not allowed` });
   }
 
-  const { recipe } = req.query;
+  const { recipe, type } = req.query;
   
   let list = [];
 
@@ -24,22 +24,53 @@ export default async function handler(req, res) {
   let data = null;
 
   try {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`);
-    const result = await response.json();
+    switch(type) {
+      case 'search':
+        default:
+          const searchResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`);
+          const searchResult = await searchResponse.json();
+      
+          if (searchResult.meals && searchResult.meals[0].strMeal.toLowerCase() === recipe.toLowerCase()) {
+            data = searchResult;
+          } else {
+            for (const i of list) {
+              const newResponse = await fetch(i);
+              const newResult = await newResponse.json();
+          
+              // if find a valid result, break
+              if (newResult && newResult.meals) {
+                data = newResult;
+                break;
+              }
+            }
+          }
 
-    if (result.meals && result.meals[0].strMeal.toLowerCase() === recipe.toLowerCase()) {
-      data = result;
-    } else {
-      for (const i of list) {
-        const response = await fetch(i);
-        const result = await response.json();
-    
-        // if find a valid result, break
-        if (result && result.meals) {
-          data = result;
           break;
-        }
-      }
+      
+      case 'category':
+        const catResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${recipe}`);
+        const catResult = await catResponse.json();
+
+        data = catResult;
+
+        break;
+
+      case 'area':
+        const areaResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${recipe}`);
+        const areaResult = await areaResponse.json();
+
+        data = areaResult;
+
+        break;
+
+      case 'ingredient':
+        const ingResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${recipe}`);
+        const ingResult = await ingResponse.json();
+
+        data = ingResult;
+
+        break;
+
     }
 
     if (!data || data.meals === null) {
