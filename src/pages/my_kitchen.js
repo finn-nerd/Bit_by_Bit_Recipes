@@ -18,16 +18,36 @@ function MyKitchen({ isLoggedIn }) {
     const router = useRouter(); // used to navigate to diff pages
 
     const [username, setUsername] = useState('');
-
+    const [countRecipes, setCountRecipes] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
 
-    const [countRecipes, setCountRecipes] = useState('');
-
     // If the user is not logged in, prompt them
     const loginRedirect = () => router.push('/login');
     const backRedirect = () => router.push('/home');
+
+    // Logout functionality
+    const handleLogout = async () => {
+        try {
+            const res = await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            if (res.ok) {
+                // Redirect to login page after successful logout
+                router.push('/login');
+            } else {
+                console.error('Failed to logout');
+            }
+        } catch (err) {
+            console.error('Error during logout:', err);
+        }
+    };
+
     if (!isLoggedIn)
         return (
             <div className="App">
@@ -130,7 +150,7 @@ function MyKitchen({ isLoggedIn }) {
             // Set the state with the transformed meal objects
             setMeals(savedMeals || []);
 
-            setCountRecipes(savedMeals.length)
+            setCountRecipes(savedMeals.length);
         } catch (err) {
             console.error("Failed to fetch meals:", err);
             setMeals([]);  // Clear meals list in case of error
@@ -142,9 +162,9 @@ function MyKitchen({ isLoggedIn }) {
     // Unsave Meals
     const unsaveMeal = (meal) => {
         // Update local copy
-        setMeals((prev) => prev.filter((id) => id !== meal.idMeal));
+        setMeals((prev) => prev.filter((m) => m.mealID !== meal.mealID));
         // Update DB
-        updateSavedMeals(meal.idMeal, meal.strMeal, meal.strMealThumb, false);
+        updateSavedMeals(meal.mealID, meal.mealName, meal.mealThumbnail, false);
     };
 
     const updateSavedMeals = async (mealID, mealName, mealThumbnail, mealIsSaved) => {
@@ -170,6 +190,13 @@ function MyKitchen({ isLoggedIn }) {
     
             const data = await res.json();
             console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"
+            
+            // Refresh the meals list after a successful update
+            if (!mealIsSaved) {
+                setTimeout(() => {
+                    fetchSavedMeals();
+                }, 500);
+            }
     
         } catch (err) {
             console.error('Error saving meal:', err);
@@ -188,15 +215,16 @@ function MyKitchen({ isLoggedIn }) {
     // Fetch username
     const fetchUsername = async () => {
         try {
-        const res = await fetch(`/api/get_username`);
-        const data = await res.json();
+            const res = await fetch(`/api/get_username`);
+            const data = await res.json();
 
-        setUsername(data.username);
+            setUsername(data.username);
         } catch (err) {
-        console.error("Failed to categories:", err);
-        setUsername([]);
+            console.error("Failed to fetch username:", err);
+            setUsername("");
         }
     };
+    
     // bar for old password
     const handleEnterOld = async (e) => {
         e.preventDefault();
@@ -270,12 +298,12 @@ function MyKitchen({ isLoggedIn }) {
                 src="/pizza.png" 
                 alt="Pizza"/>
 
-                {/* Return to login button */}
+                {/* Logout button */}
                 <div className="flex justify-center items-center my-10">
                     <button
                         className="cursor-pointer bg-[#EB4B4B] text-white text-xl sm:text-2xl md:text-3xl lg:text-[30px] p-5 rounded-[20px] border-[6px] border-[#B21F1F] font-['Jersey_10']"
                         type="button"
-                        onClick={loginRedirect}
+                        onClick={handleLogout}
                     >
                         Logout
                     </button>
@@ -302,57 +330,56 @@ function MyKitchen({ isLoggedIn }) {
 
             {/* Meal Cards */}
             <div className="flex flex-wrap justify-center mt-[180px] px-10 pb-10 pl-[22%] gap-10">
-            {loading ? (
-            <p className="text-white text-2xl font-bold">Loading...</p>
-            ) : meals.length > 0 ? (
-            meals.map((meal) => {
-                const isSaved = true;
-                return (
-                    <div
-                    key={meal.idMeal}
-                    onClick={() => handleRedirect(meal.idMeal)}
-                    className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
-                    >
-                    {/* Favorite Button */}
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation(); // Prevent triggering onClick of the card
-                            unsaveMeal(meal);  // Send meal to backend to be favorited/unfavorited
-                        }}
-                        className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
-                    >
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
-                        >
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                    </button>
-                    {/* Recipe Image */}
-                    <div className="flex-1" style={{ height: '65%' }}>
-                        <img
-                        src={meal.strMealThumb}
-                        alt={meal.strMeal}
-                        className="w-full h-full object-cover rounded-t-[12px]"
-                        />
-                    </div>
-                    {/* Recipe Title */}
-                    <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
-                        <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
-                    </div>
-                    </div>
-                    )
-                }
-            )
-            ) : (
-                <p className="text-white text-2xl font-bold">{userInputResponse}</p>
-            )}
+                {loading ? (
+                    <p className="text-white text-2xl font-bold">Loading...</p>
+                ) : meals.length > 0 ? (
+                    meals.map((meal) => {
+                        const isSaved = true;
+                        return (
+                            <div
+                                key={meal.mealID}
+                                onClick={() => handleRedirect(meal.mealID)}
+                                className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
+                            >
+                                {/* Favorite Button */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent triggering onClick of the card
+                                        unsaveMeal(meal);  // Send meal to backend to be favorited/unfavorited
+                                    }}
+                                    className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                                    >
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                </button>
+                                {/* Recipe Image */}
+                                <div className="flex-1" style={{ height: '65%' }}>
+                                    <img
+                                        src={meal.mealThumbnail}
+                                        alt={meal.mealName}
+                                        className="w-full h-full object-cover rounded-t-[12px]"
+                                    />
+                                </div>
+                                {/* Recipe Title */}
+                                <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
+                                    <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.mealName}</p>
+                                </div>
+                            </div>
+                        )
+                    })
+                ) : (
+                    <p className="text-white text-2xl font-bold">{userInputResponse}</p>
+                )}
             </div>
             
         </div>
     );
-
 }
+
 
 export default MyKitchen;

@@ -1,12 +1,8 @@
-import { Pool } from 'pg';
+import db from './db'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -20,7 +16,7 @@ export default async function handler(req, res) {
   
   try {
     // Look up the user in the database
-    const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    const result = await db.query('SELECT * FROM users WHERE username = $1', [username]);
     
     if (result.rows.length === 0) {
       return res.status(401).json({ message: 'Invalid credentials' });

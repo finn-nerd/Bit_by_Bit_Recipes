@@ -1,11 +1,6 @@
-import { Pool } from 'pg';
+import db from './db'
 import jwt from 'jsonwebtoken';
 import { parse, serialize} from 'cookie';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
 
 // Extract and verify JWT from cookie or Authorization header
 export default async function getUserFromReq(req) {
@@ -36,7 +31,7 @@ export default async function getUserFromReq(req) {
   }
 
   // Fetch user record
-  const { rows } = await pool.query(
+  const { rows } = await db.query(
     'SELECT id, username FROM users WHERE id = $1',
     [payload.userId]
   );
