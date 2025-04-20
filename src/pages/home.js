@@ -28,17 +28,18 @@ function Home() {
     };
 
     // Favorite a meal
-    const toggleSavedMeal = (mealID) => {
-        const isNowSaved = !savedMeals.includes(mealID)
+    const toggleSavedMeal = (meal) => {
+        const isNowSaved = !savedMeals.includes(meal.idMeal)
         setSavedMeals((prev) =>
-            isNowSaved ? [...prev, mealID] : prev.filter((id) => id !== mealID)
+            isNowSaved ? [...prev, meal.idMeal] : prev.filter((id) => id !== meal.idMeal)
         );
 
-        console.log(`SAVED ${mealID}: ${isNowSaved}`);
+        console.log(`SAVED ${meal.idMeal}: ${isNowSaved}`);
         // TODO:
         // update backend copy of favorites list
         // if (isNowFav) --> add it to db
         // else --> delete it from db
+        // make sure to include {meal.idMeal}, {meal.strMeal}, and {meal.strMealThumb}
     };
 
   // Fetch meal data from backend
@@ -131,7 +132,7 @@ function Home() {
                 <button
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering onClick of the card
-                        toggleSavedMeal(meal.idMeal);  // Send meal to backend to be favorited/unfavorited
+                        toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
                     }}
                     className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
                 >
