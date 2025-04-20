@@ -31,7 +31,6 @@ function Home() {
   // Create list of favorited meals
   const [savedMeals, setSavedMeals] = useState([]); // or useState(new Set())
 
-
   useEffect(() => {
     fetchMeals(); // default category
     fetchSavedMeals();
@@ -39,28 +38,57 @@ function Home() {
     fetchAreas();
   }, []);
 
-  // Favorite a meal
-  const toggleSavedMeal = (mealID) => {
-      const isNowSaved = !savedMeals.includes(mealID)
-      setSavedMeals((prev) =>
-          isNowSaved ? [...prev, mealID] : prev.filter((id) => id !== mealID)
-      );
+    // Find currently favorited meals
+    const fetchSavedMeals = async () => {
+        try {
+            const res = await fetch('/api/fetch_saved_meals');
+            if (!res.ok) throw new Error(await res.text());
+            const { savedMeals } = await res.json();
+            setSavedMeals(savedMeals.map(m => m.mealID));
+        } catch (err) {
+            console.error('Could not load saved recipes:', err);
+        }
+    };
 
-      console.log(`SAVED ${mealID}: ${isNowSaved}`);
-      // TODO:
-      // update backend copy of favorites list
-      // if (isNowFav) --> add it to db
-      // else --> delete it from db
-  };
-  // Find currently favorited meals
-  const fetchSavedMeals = async () => {
-      // TODO:
-      // find all favorite meal ids
-      // populate the 'favorites' list with it
+    // Favorite a meal
+    const toggleSavedMeal = (meal) => {
+        // Update local copy of saved IDs
+        const isNowSaved = !savedMeals.includes(meal.idMeal)
+        setSavedMeals((prev) =>
+            isNowSaved ? [...prev, meal.idMeal] : prev.filter((id) => id !== meal.idMeal)
+        );
+        // Update DB
+        updateSavedMeals(meal.idMeal, meal.strMeal, meal.strMealThumb, isNowSaved);
+    };
 
-      // dummy data for now
-      setSavedMeals(['52772', '52874', '52913']);
-  };
+    const updateSavedMeals = async (mealID, mealName, mealThumbnail, mealIsSaved) => {
+        try {
+            const res = await fetch('/api/update_saved_meals', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mealID,         // ID of the meal
+                    mealName,       // Name of the meal
+                    mealThumbnail,  // Thumbnail image URL
+                    mealIsSaved     // Boolean
+                }),
+            });
+    
+            // Handle non-OK response
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+    
+            const data = await res.json();
+            console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"
+    
+        } catch (err) {
+            console.error('Error saving meal:', err);
+        }
+    }
 
   // Fetch meal data from backend
   const fetchMeals = async (query = 'chicken', type='search') => {
@@ -144,6 +172,8 @@ function Home() {
   // sidebar
   const toggleSidebar = () => setOpenSidebar(!openSidebar);
   const closeSidebar = () => setOpenSidebar(false);
+
+  const handleClick = () => router.push(`/my_kitchen`)
 
   return (
     <div className="App">
@@ -248,7 +278,11 @@ function Home() {
             placeholder="Search for a recipe here..."
           />
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] mx-3 text-white font-['Jersey_10']">My Kitchen</h1>
+          <button 
+          onClick={handleClick}
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] mx-3 text-white font-['Jersey_10']">
+            My Kitchen
+          </button>
         </div>
       </div>
 
@@ -270,7 +304,7 @@ function Home() {
                 <button
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering onClick of the card
-                        toggleSavedMeal(meal.idMeal);  // Send meal to backend to be favorited/unfavorited
+                        toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
                     }}
                     className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
                 >
