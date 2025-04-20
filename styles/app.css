@@ -7,6 +7,18 @@ html, body, #root {
   padding: 0;
 }
 
+/* Make buttons actually "click in" */
+button:active {
+    transform: scale(0.97);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    cursor: pointer;
+}
+  
+
 .App {
   height: 100%;
   background: linear-gradient(to bottom, #FBC388, #F4854A);
