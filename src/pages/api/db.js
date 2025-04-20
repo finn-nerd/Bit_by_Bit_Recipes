@@ -26,6 +26,16 @@ if (!global._savedRecipesPool) {
   });
 }
 
+// Manages client connection and release
+export async function withClient(callback) {
+  const client = await db.connect();
+  try {
+    return await callback(client);
+  } finally {
+    client.release();
+  }
+}
+
 // Export the pool to be used by other files
 const db = global._savedRecipesPool;
 export default db;

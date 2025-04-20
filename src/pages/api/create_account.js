@@ -1,4 +1,4 @@
-import db from './db'
+import db, { withClient } from './db'
 import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
@@ -15,22 +15,29 @@ export default async function handler(req, res) {
   }
   
   try {
-    // Check if the username already exists
-    const userCheck = await db.query('SELECT id FROM users WHERE username = $1', [username]);
-    if (userCheck.rows.length > 0) {
-      return res.status(409).json({ message: 'Username already exists' });
-    }
+    const result = await withClient(async (client) => {
+      // Check if the username already exists
+      const userCheck = await client.query('SELECT id FROM users WHERE username = $1', [username]);
+      if (userCheck.rows.length > 0) {
+        return { status: 409, data: { message: 'Username already exists' } };
+      }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      // Insert the new user into the database
+      const insertResult = await client.query(
+        'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username',
+        [username, hashedPassword]
+      );
+      
+      return {
+        status: 201,
+        data: { user: insertResult.rows[0] }
+      };
+    });
     
-    // Insert the new user into the database
-    const result = await db.query(
-      'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username',
-      [username, hashedPassword]
-    );
-    
-    res.status(201).json({ user: result.rows[0] });
+    return res.status(result.status).json(result.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
