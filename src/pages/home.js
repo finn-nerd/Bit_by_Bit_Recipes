@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Sidebar from '../../components/sidebar'
 import { Listbox } from '@headlessui/react';
+import { parseCookies } from 'nookies';
 
-function Home() {
+export async function getServerSideProps(ctx) {
+    const { token } = parseCookies(ctx);
+
+    // Pass token status as a prop to the page
+    return {
+        props: { isLoggedIn: Boolean(token) },
+    };
+}
+
+function Home({ isLoggedIn }) {
   const router = useRouter();
   const [userInputResponse, setUserInputResponse] = useState('');
 
@@ -29,7 +39,7 @@ function Home() {
   // side bar
   const [openSidebar, setOpenSidebar] = useState(false); // sidebar isnt open by default
 
-  // Create list of favorited meals
+  // Create list of saved meals
   const [savedMeals, setSavedMeals] = useState([]); // or useState(new Set())
 
   useEffect(() => {
@@ -43,16 +53,19 @@ function Home() {
     fetchMeals()
   }, [selectedArea, selectedCat, filteredIngredients]);
 
-    // Find currently favorited meals
+    // Find currently saved meals
     const fetchSavedMeals = async () => {
-        try {
-            const res = await fetch('/api/fetch_saved_meals');
-            if (!res.ok) throw new Error(await res.text());
-            const { savedMeals } = await res.json();
-            setSavedMeals(savedMeals.map(m => m.mealID));
-        } catch (err) {
-            console.error('Could not load saved recipes:', err);
+        if (isLoggedIn) {
+            try {
+                const res = await fetch('/api/fetch_saved_meals');
+                if (!res.ok) throw new Error(await res.text());
+                const { savedMeals } = await res.json();
+                setSavedMeals(savedMeals.map(m => m.mealID));
+            } catch (err) {
+                console.error('Could not load saved recipes:', err);
+            }
         }
+        else setSavedMeals([]);
     };
 
     // Favorite a meal
@@ -328,6 +341,7 @@ function Home() {
                 className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
                 >
                 {/* Favorite Button */}
+                {isLoggedIn && ( // Only show when user is logged in
                 <button
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering onClick of the card
@@ -343,6 +357,8 @@ function Home() {
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                     </svg>
                 </button>
+                )}
+                
                 {/* Recipe Image */}
                 <div className="flex-1" style={{ height: '65%' }}>
                     <img
@@ -365,7 +381,7 @@ function Home() {
       </div>
 
         {/* sidebar */}
-        <Sidebar isOpen={openSidebar} isClose={closeSidebar} />
+        <Sidebar isOpen={openSidebar} isClose={closeSidebar} isLoggedIn={isLoggedIn}/>
 
     </div>
   );

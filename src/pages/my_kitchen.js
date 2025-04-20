@@ -48,6 +48,7 @@ function MyKitchen({ isLoggedIn }) {
         }
     };
 
+    // Return a different page if the user is not logged in
     if (!isLoggedIn)
         return (
             <div className="App">
