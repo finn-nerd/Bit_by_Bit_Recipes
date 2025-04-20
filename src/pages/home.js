@@ -24,6 +24,7 @@ function Home() {
 
   // ingredient search bar
   const [search_ing, setSearch_Ing] = useState('');
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
 
   // side bar
   const [openSidebar, setOpenSidebar] = useState(false); // sidebar isnt open by default
@@ -91,10 +92,15 @@ function Home() {
     }
 
   // Fetch meal data from backend
-  const fetchMeals = async (query = 'chicken', type='search') => {
-    setLoading(true);
+  const fetchMeals = async (query = '') => {
+    setLoading(true);    
+    
     try {
-      const res = await fetch(`/api/meals?recipe=${encodeURIComponent(query)}&type=${type}`);
+        const res = await fetch('/api/meals', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, selectedCat, selectedArea, filteredIngredients })
+        });
 
       // if category doesn't exist
       if (!res.ok) {
@@ -106,7 +112,7 @@ function Home() {
       }
 
       const data = await res.json();
-      setMeals(data.meals || []);
+      setMeals(data || []);
     } catch (err) {
       console.error("Failed to fetch meals:", err);
       setMeals([]);
@@ -120,7 +126,7 @@ function Home() {
       const res = await fetch(`/api/categories`);
       const data = await res.json();
 
-      const categoryNames = data.meals.map((cat) => cat.strCategory);
+      const categoryNames = ['Any', ...data.meals.map((cat) => cat.strCategory)];
       setCategories(categoryNames);
     } catch (err) {
       console.error("Failed to categories:", err);
@@ -129,8 +135,7 @@ function Home() {
   };
   // for category selection from filter bar
   const handleSelectCat = (value) => {
-    setSelectedCat(value)
-    fetchMeals(value, 'category');
+    setSelectedCat((value === 'Any' ? null : value));
   }
 
   // Fetch categories for dropdown menu
@@ -139,29 +144,37 @@ function Home() {
       const res = await fetch(`/api/areas`);
       const data = await res.json();
 
-      const areaNames = data.meals.map((area) => area.strArea);
+      const areaNames = ['Any', ...data.meals.map((area) => area.strArea)];
       setAreas(areaNames);
     } catch (err) {
       console.error("Failed to areas:", err);
       setAreas([]);
     }
   };
+
   // for area selection from filter bar
   const handleSelectArea = (value) => {
-    setSelectedArea(value)
-    fetchMeals(value, 'area');
+    setSelectedArea((value === 'Any' ? null : value));
   }
 
   // search bar enter
   const handleEnter = async (e) => {
     e.preventDefault();
-    fetchMeals(search_input, 'search');
+    fetchMeals(search_input);
   };
 
   // search bar enter for ingredients
   const handleEnterIng = async (e) => {
     e.preventDefault();
-    fetchMeals(search_ing, 'ingredient');
+    const trimmed = search_ing.trim();
+    if (e.key === 'Enter' && trimmed && !filteredIngredients.includes(trimmed)) {
+        setFilteredIngredients([...filteredIngredients, trimmed]);
+        setSearch_Ing(''); // clear input
+    }
+  };
+
+  const removeIngredient = (ingredient) => {
+    setFilteredIngredients(prev => prev.filter(item => item !== ingredient));
   };
 
   // clicking on a meal card
@@ -179,8 +192,16 @@ function Home() {
     <div className="App">
 
       {/* Left filter bar */}
-      <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center">
-        <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-10 font-['Jersey_10']">Choose a Category: </p>
+      <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-15">
+
+        {/* Search Button */}
+        <button 
+          className="bg-[#E65340] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 mb-5 rounded-[20px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+          onClick={() => fetchMeals()}>
+            Search
+        </button>
+
+        <p className="text-xl sm:text-2xl xl:text-[25px] text-black font-['Jersey_10']">Choose a Category: </p>
 
         {/* Dropdown menu for categories */}
         <Listbox
@@ -190,7 +211,7 @@ function Home() {
 
           {/* Dropdown button */}
           <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
-            {selectedCat || 'Select an option:'}
+            {selectedCat || 'Any'}
           </Listbox.Button>
 
           {/* Dropdown options */}
@@ -219,7 +240,7 @@ function Home() {
 
           {/* Dropdown button */}
           <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
-            {selectedArea || 'Select an option:'}
+            {selectedArea || 'Any'}
           </Listbox.Button>
 
           {/* Dropdown options */}
@@ -251,8 +272,17 @@ function Home() {
               }
             }}
             className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-[80%] rounded-[25px] border-[4px] border-[#C13737] mt-3 mb-7 p-3 font-['Jersey_10']"
-            placeholder="Search for an ingredient..."
+            placeholder="Chicken"
           />
+
+        {/* Current Ingredients */}
+        <div className="flex flex-wrap gap-3 p-5 justify-center">
+            {filteredIngredients.map((ing, idx) => (
+            <button key={idx} className="bg-[#f05d4a] text-xl px-3 py-1 rounded-full cursor-pointer font-['Jersey_10']" onClick={() => removeIngredient(ing)}>
+                {ing}
+            </button>
+            ))}
+        </div>
 
       </div>
 
