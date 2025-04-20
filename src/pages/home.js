@@ -10,6 +10,37 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false); // sidebar isnt open by default
 
+  // Create list of favorited meals
+  const [favorites, setFavorites] = useState([]); // or useState(new Set())
+
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
+
+    // Find currently favorited meals
+    const fetchFavorites = async () => {
+        // TODO:
+        // find all favorite meal ids
+        // populate the 'favorites' list with it
+
+        // dummy data for now
+        setFavorites(['52772', '52874', '52913']);
+    };
+
+    // Favorite a meal
+    const toggleFavorite = (mealID) => {
+        const isNowFav = !favorites.includes(mealID)
+        setFavorites((prev) =>
+            isNowFav ? [...prev, mealID] : prev.filter((id) => id !== mealID)
+        );
+        
+        console.log(`FAVORITED ${mealID}: ${isNowFav}`);
+        // TODO:
+        // update backend copy of favorites list
+        // if (isNowFav) --> add it to db
+        // else --> delete it from db
+    };
+
   // Fetch meal data from backend
   const fetchMeals = async (query = 'chicken') => {
     setLoading(true);
@@ -88,24 +119,46 @@ function Home() {
         {loading ? (
           <p className="text-white text-2xl font-bold">Loading...</p>
         ) : meals.length > 0 ? (
-          meals.map((meal) => (
-            <div
-              key={meal.idMeal}
-              onClick={() => handleRedirect(meal.idMeal)}
-              className="cursor-pointer flex flex-col h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center"
-            >
-              <div className="flex-1" style={{ height: '65%' }}>
-                <img
-                src={meal.strMealThumb}
-                alt={meal.strMeal}
-                className="w-full h-full object-cover rounded-t-[12px]"
-                />
-              </div>
-              <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
-                <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
-              </div>
-            </div>
-          ))
+          meals.map((meal) => {
+            const isFav = favorites.includes(meal.idMeal);
+            return (
+                <div
+                key={meal.idMeal}
+                onClick={() => handleRedirect(meal.idMeal)}
+                className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
+                >
+                {/* Favorite Button */}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering onClick of the card
+                        toggleFavorite(meal.idMeal);  // Send meal to backend to be favorited/unfavorited
+                    }}
+                    className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
+                >
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className={`w-6 h-6 text-yellow-400 ${isFav ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                    >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                </button>
+                {/* Recipe Image */}
+                <div className="flex-1" style={{ height: '65%' }}>
+                    <img
+                    src={meal.strMealThumb}
+                    alt={meal.strMeal}
+                    className="w-full h-full object-cover rounded-t-[12px]"
+                    />
+                </div>
+                {/* Recipe Title */}
+                <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
+                    <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
+                </div>
+                </div>
+                )
+            }
+          )
         ) : (
           <p className="text-white text-2xl font-bold">{userInputResponse}</p>
         )}
