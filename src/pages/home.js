@@ -39,6 +39,10 @@ function Home() {
     fetchAreas();
   }, []);
 
+  useEffect(() => {
+    fetchMeals()
+  }, [selectedArea, selectedCat, filteredIngredients]);
+
     // Find currently favorited meals
     const fetchSavedMeals = async () => {
         try {
@@ -160,7 +164,6 @@ function Home() {
   // search bar enter
   const handleEnter = async (e) => {
     e.preventDefault();
-    fetchMeals(search_input);
   };
 
   // search bar enter for ingredients
@@ -193,13 +196,6 @@ function Home() {
 
       {/* Left filter bar */}
       <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-20">
-
-        {/* Search Button */}
-        <button 
-          className="bg-[#E65340] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 mb-5 rounded-[20px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
-          onClick={() => fetchMeals()}>
-            Search
-        </button>
 
         <p className="text-xl sm:text-2xl xl:text-[25px] text-black font-['Jersey_10']">Choose a Category: </p>
 
