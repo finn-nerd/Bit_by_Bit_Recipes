@@ -192,7 +192,7 @@ function Home() {
     <div className="App">
 
       {/* Left filter bar */}
-      <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-15">
+      <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-20">
 
         {/* Search Button */}
         <button 
