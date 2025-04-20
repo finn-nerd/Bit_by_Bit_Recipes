@@ -5,10 +5,10 @@ export default async function handler(req, res) {
     }
   
   // Set variables for the information fields
-  const mealID = req.body.mealID?.trim();
-  const mealName = req.body.mealName?.trim();
-  const mealThumbnail = req.body.mealThumbnail?.trim();
-  const isSaved = req.body.mealIsSaved?.trim()
+  const mealID = req.body.mealID
+  const mealName = req.body.mealName
+  const mealThumbnail = req.body.mealThumbnail
+  const isSaved = req.body.mealIsSaved
 
     if (!mealID || !mealName || !mealThumbnail || !isSaved) {
         return res.status(400).json({ message: 'Missing meal information' });

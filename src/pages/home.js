@@ -22,8 +22,8 @@ function Home() {
         try {
             const res = await fetch('/api/fetch_saved_meals');
             if (!res.ok) throw new Error(await res.text());
-            const { saved_meals } = await res.json();
-            setSavedMeals(saved_meals.map(m => m.mealID));
+            const { savedMeals } = await res.json();
+            setSavedMeals(savedMeals.map(m => m.mealID));
         } catch (err) {
             console.error('Could not load saved recipes:', err);
         }
@@ -51,7 +51,7 @@ function Home() {
                     mealID,         // ID of the meal
                     mealName,       // Name of the meal
                     mealThumbnail,  // Thumbnail image URL
-                    mealIsSaved     // Boolean or string representing if the meal is saved
+                    mealIsSaved     // Boolean
                 }),
             });
     
