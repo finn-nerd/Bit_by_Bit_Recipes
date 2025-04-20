@@ -20,15 +20,8 @@ function Recipe({ meal }) {
         const ingredient = meal[`strIngredient${i}`];
         const measurement = meal[`strMeasure${i}`];
 
-        const clean = measurement.trim();
-        const isPureNumber = /^[\d.\/¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]+$/.test(clean); // handles "2", "1.5", "1/2", etc.
-
-        const display = isPureNumber
-        ? `${clean} ${ingredient}`
-        : `${clean} of ${ingredient}`;
-
         if(ingredient){
-            ingredients.push(display);
+            ingredients.push(measurement + " " + ingredient);
         } else {
             break;
         }
