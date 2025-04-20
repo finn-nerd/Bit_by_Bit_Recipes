@@ -75,7 +75,7 @@ function MyKitchen({ isLoggedIn }) {
                         
                         <div className="flex flex-row gap-20 justify-center h-20">
                             {/* Login Button */}
-                            <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl text-3xl text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                            <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-3xl text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
                             type="button"
                             onClick={loginRedirect}>
                                 Login
