@@ -64,7 +64,7 @@ function Login() {
         <header className="App-header">
           <div className="relative flex items-center justify-center">
             {/* left floating pizza */}
-            <img className="absolute left-[-60px] sm:left-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+            <img className="absolute left-[-60px] w-[50px] sm:w-[70px] sm:left-[-80px] animate-bounce ease-in-out [animation-duration:2s] z-10" 
             src="/pizza.png" 
             alt="Pizza"/>
             
@@ -75,7 +75,7 @@ function Login() {
             </div>
 
             {/* right floating pizza */}
-            <img className="absolute right-[-60px] sm:right-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+            <img className="absolute right-[-60px] w-[50px] sm:w-[70px] sm:right-[-80px] animate-bounce ease-in-out [animation-duration:2s] z-10" 
             src="/pizza.png" 
             alt="Pizza"/>
           </div>
@@ -90,7 +90,7 @@ function Login() {
               </div>
 
               {/* button to go to create account page */}
-              <button className="bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-lg md:text-xl lg:text-[25px] text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']"
+              <button className="cursor-pointer bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-lg md:text-xl lg:text-[25px] text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']"
                 type="button" 
                 onClick={handleClick}>
                   If you're new, please create an account by clicking here!
@@ -120,7 +120,7 @@ function Login() {
           {/* submit button to check user authentication*/}
           <form className="flex justify-center flex-col items-center" onSubmit={handleSubmit}>
               {/* submit button to check user authentication*/}
-              <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+              <button className="cursor-pointer bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
                 type="submit">
                   Login
               </button>

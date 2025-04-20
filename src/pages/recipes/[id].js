@@ -28,6 +28,7 @@ function Recipe({ meal }) {
     }
 
     const handleClick = () => router.push('../home');
+    const handleClick2 = () => router.push(`/my_kitchen`)
 
     return (
         <div className="App">
@@ -36,14 +37,18 @@ function Recipe({ meal }) {
             <div className="fixed top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
                 <div className="flex items-center my-5">
                 <button 
-                className="bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10'] z-20"
+                className="cursor-pointer bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10'] z-20"
                 type="button" 
                 onClick={handleClick}>
                     Back to Home
                 </button>
 
                 {/* My Kitchen page */}
-                <h1 className="ml-auto text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] mx-8 text-white font-['Jersey_10']">My Kitchen</h1>
+                <button 
+                onClick={handleClick2}
+                className="cursor-pointer ml-auto bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">
+                    My Kitchen
+                </button>
                 </div>
             </div>
 
