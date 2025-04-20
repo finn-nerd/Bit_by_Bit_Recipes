@@ -164,6 +164,7 @@ function Home() {
   // search bar enter
   const handleEnter = async (e) => {
     e.preventDefault();
+    fetchMeals(search_input);
   };
 
   // search bar enter for ingredients
