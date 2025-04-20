@@ -105,7 +105,7 @@ function CreateAccount() {
                     {/* submit button to check user authentication */}
                     <form className="flex justify-center flex-col items-center" 
                     onSubmit={handleSubmit}>
-                        <button className="bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-lg md:text-xl lg:text-[25px] text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']"
+                        <button className="cursor-pointer bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-lg md:text-xl lg:text-[25px] text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']"
                          type="submit">
                             Submit your new username and password!
                         </button>
@@ -114,7 +114,7 @@ function CreateAccount() {
 
                 {/* click button to return to login page */}
                 <div className="flex justify-center flex-col items-center">
-                    <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                    <button className="cursor-pointer bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
                      type="button" 
                      onClick={handleClick}>
                         Return to Login Page
