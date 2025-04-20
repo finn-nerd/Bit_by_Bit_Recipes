@@ -1,11 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
 
-function MyKitchen() {
+export async function getServerSideProps(ctx) {
+    const { token } = parseCookies(ctx);
+
+    // Pass token status as a prop to the page
+    return {
+        props: { isLoggedIn: Boolean(token) },
+    };
+}
+
+function MyKitchen({ isLoggedIn }) {
     const [userInputResponse, setUserInputResponse] = useState('');
     const [meals, setMeals] = useState([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter(); // used to navigate to diff pages
+
+    // If the user is not logged in, prompt them
+    const loginRedirect = () => router.push('/login');
+    const backRedirect = () => router.push('/home');
+    if (!isLoggedIn)
+        return (
+            <div className="App">
+                {/* blocks for background aesthetics */}
+                <div className="fixed top-0 left-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+                <div className="fixed top-0 right-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+                <div className="fixed bottom-0 left-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+                <div className="fixed bottom-0 right-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
+
+                <div className="fixed top-[10%] left-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+                <div className="fixed top-[10%] right-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+                <div className="fixed bottom-[10%] left-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+                <div className="fixed bottom-[10%] right-0 w-[30%] h-[15%] bg-[#F07853] z-0"></div>
+
+                <div className="fixed top-[25%] left-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+                <div className="fixed top-[25%] right-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+                <div className="fixed bottom-[25%] left-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+                <div className="fixed bottom-[25%] right-0 w-[25%] h-[15%] bg-[#F09053] z-0"></div>
+
+                <header className="App-header">
+                    <div className="relative flex items-center justify-center">
+                    {/* left floating pizza */}
+                    <img className="absolute left-[-60px] sm:left-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+                    src="/pizza.png" 
+                    alt="Pizza"/>
+                    
+                    {/* title for page */}
+                    <div className="relative inline-block">
+                        <h1 className="relative z-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[70px] font-['Jersey_10']">Bit by Bit Recipes</h1>
+                        <h1 className="absolute z-0 text-[#D35E2C] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[70px] whitespace-nowrap top-[0.1em] right-[0.1em] font-['Jersey_10']">Bit by Bit Recipes</h1>
+                    </div>
+
+                    {/* right floating pizza */}
+                    <img className="absolute right-[-60px] sm:right-[-80px] w-[50px] sm:w-[70px] animate-[float_infinite_2s] z-1" 
+                    src="/pizza.png" 
+                    alt="Pizza"/>
+                    </div>
+                    
+                    {/* overall text box */}
+                    <div className="w-full sm:w-[90%] md:w-[75%] lg:w-[60%] xl:w-[45%] max-w-[800px] h-auto mt-5 mb-5 mx-auto p-5 rounded-[20px] border-8 border-solid border-[#C13D00] bg-gradient-to-b from-[#f18d5e] to-[#ef6f34]">
+                        {/* welcome box and text */}
+                        <div className="bg-[#E65340] w-full sm:w-[90%] md:w-[75%] lg:w-[650px] h-auto m-auto p-4 rounded-[10px] border-4 border-solid border-[#C13737]">
+                        <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] mt-0 text-center">
+                            Unfortunately, this page requires you to be logged in!
+                        </p>
+                        </div>
+
+                        {/* button to go to create account page */}
+                        <div className="bg-[#EB4B4B] w-full sm:w-auto h-auto flex items-center justify-center text-base sm:text-xl md:text-2xl lg:text-3xl text-white mt-5 mb-5 mx-auto px-5 py-2 rounded-[10px] border-4 border-solid border-[#B21F1F] font-['Jersey_10']">
+                            Please log in or create an account if you're new.
+                            This will let you access My Kitchen, where you can save your favorite recipes!
+                        </div>
+                        
+                        <div className="flex flex-row gap-20 justify-center h-20">
+                            {/* Login Button */}
+                            <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl text-3xl text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                            type="button"
+                            onClick={loginRedirect}>
+                                Login
+                            </button>
+
+                            {/* Go back Button */}
+                            <button className="bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-3xl text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                            type="button"
+                            onClick={backRedirect}>
+                                Return
+                            </button>
+                        </div>
+                        
+                    </div>
+                </header>
+            </div>
+        );
 
     // Fetch meal data from backend
     const fetchSavedMeals = async () => {
