@@ -11,30 +11,30 @@ function Home() {
   const [openSidebar, setOpenSidebar] = useState(false); // sidebar isnt open by default
 
   // Create list of favorited meals
-  const [favorites, setFavorites] = useState([]); // or useState(new Set())
+  const [savedMeals, setSavedMeals] = useState([]); // or useState(new Set())
 
     useEffect(() => {
-        fetchFavorites();
+        fetchSavedMeals();
     }, []);
 
     // Find currently favorited meals
-    const fetchFavorites = async () => {
+    const fetchSavedMeals = async () => {
         // TODO:
         // find all favorite meal ids
         // populate the 'favorites' list with it
 
         // dummy data for now
-        setFavorites(['52772', '52874', '52913']);
+        setSavedMeals(['52772', '52874', '52913']);
     };
 
     // Favorite a meal
-    const toggleFavorite = (mealID) => {
-        const isNowFav = !favorites.includes(mealID)
-        setFavorites((prev) =>
-            isNowFav ? [...prev, mealID] : prev.filter((id) => id !== mealID)
+    const toggleSavedMeal = (mealID) => {
+        const isNowSaved = !savedMeals.includes(mealID)
+        setSavedMeals((prev) =>
+            isNowSaved ? [...prev, mealID] : prev.filter((id) => id !== mealID)
         );
-        
-        console.log(`FAVORITED ${mealID}: ${isNowFav}`);
+
+        console.log(`SAVED ${mealID}: ${isNowSaved}`);
         // TODO:
         // update backend copy of favorites list
         // if (isNowFav) --> add it to db
@@ -120,7 +120,7 @@ function Home() {
           <p className="text-white text-2xl font-bold">Loading...</p>
         ) : meals.length > 0 ? (
           meals.map((meal) => {
-            const isFav = favorites.includes(meal.idMeal);
+            const isSaved = savedMeals.includes(meal.idMeal);
             return (
                 <div
                 key={meal.idMeal}
@@ -131,14 +131,14 @@ function Home() {
                 <button
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering onClick of the card
-                        toggleFavorite(meal.idMeal);  // Send meal to backend to be favorited/unfavorited
+                        toggleSavedMeal(meal.idMeal);  // Send meal to backend to be favorited/unfavorited
                     }}
                     className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
                 >
                     <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    className={`w-6 h-6 text-yellow-400 ${isFav ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                    className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
                     >
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                     </svg>
