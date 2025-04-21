@@ -9,9 +9,10 @@ export default async function handler(req, res) {
   // Trimming to avoid blank username and passwords
   const username = req.body.username?.trim();
   const password = req.body.password?.trim();
+  const confirmPassword = req.body.confirmPassword?.trim();
 
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Missing username or password' });
+  if (!username || !password || !confirmPassword) {
+    return res.status(400).json({ message: 'Missing username, password, or confirm password.' });
   }
   
   try {
@@ -19,11 +20,15 @@ export default async function handler(req, res) {
       // Check if the username already exists
       const userCheck = await client.query('SELECT id FROM users WHERE username = $1', [username]);
       if (userCheck.rows.length > 0) {
-        return { status: 409, data: { message: 'Username already exists' } };
+        return { status: 409, data: { message: 'Username taken!' } };
       }
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
+
+      if (password != confirmPassword) {
+        return { status: 400, data: { message: 'Password and confirm password are not the same.' } };
+      }
       
       // Insert the new user into the database
       const insertResult = await client.query(

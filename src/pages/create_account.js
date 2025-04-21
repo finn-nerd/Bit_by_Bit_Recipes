@@ -6,6 +6,7 @@ function CreateAccount() {
     // variables
     const [username, setUsername] = useState(''); // stores username
     const [password, setPassword] = useState(''); // stores username
+    const [confirmPassword, setConfirmPassword] = useState(''); // stores username
     const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
     const router = useRouter(); // set up router
 
@@ -18,7 +19,7 @@ function CreateAccount() {
           const response = await fetch('/api/create_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password, confirmPassword })
           });
           const data = await response.json();
           
@@ -83,7 +84,7 @@ function CreateAccount() {
                     </div>
                     
                     {/* username title and input box */}
-                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] leading-tight">Username</p> 
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] mt-3 leading-tight">Username</p> 
                     <input 
                         type="username"
                         value={username} // contains username
@@ -101,6 +102,31 @@ function CreateAccount() {
                         className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Enter your password"
                     />
+
+                    {/* confirm password title and input box */}
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-[35px] leading-tight">Confirm Password</p>
+                    <input
+                        type="password"
+                        value={confirmPassword} // contains password
+                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                        className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
+                        placeholder="Confirm your password"
+                    />
+
+                    <p className="text-[#EB4B4B] text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
+                        style={{
+                            textShadow:
+                            `-2px -2px 0 white,
+                            2px -2px 0 white,
+                            -2px  2px 0 white,
+                            2px  2px 0 white,
+                            0px  2px 0 white,
+                            2px  0px 0 white,
+                            0px -2px 0 white,
+                            -2px  0px 0 white`
+                        }}>
+                        {userInputResponse}
+                    </p>
 
                     {/* submit button to check user authentication */}
                     <form className="flex justify-center flex-col items-center" 
