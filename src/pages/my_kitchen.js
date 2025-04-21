@@ -267,7 +267,7 @@ function MyKitchen({ isLoggedIn }) {
             {/* Rest of the page */}
             <div className="flex flex-row flex-grow">
                 {/* Left filter bar */}
-                <div className="mr-15 py-1 overflow-y-auto scrollbar-hide w-[20%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center">
+                <div className="py-1 overflow-y-auto scrollbar-hide w-[20%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center">
                     <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-10 font-['Jersey_10']">Logged in as: </p>
                     <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-2 font-['Jersey_10']">{username}</p>
 
