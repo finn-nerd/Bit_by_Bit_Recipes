@@ -244,7 +244,7 @@ function MyKitchen({ isLoggedIn }) {
     };
 
     return (
-        <div className="App">
+        <div className="App min-h-screen flex flex-col">
 
             {/* Top bar */}
             <div className="py-1 top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
@@ -265,7 +265,7 @@ function MyKitchen({ isLoggedIn }) {
             </div>
 
             {/* Rest of the page */}
-            <div className="flex flex-row flex-grow min-h-screen">
+            <div className="flex flex-row flex-grow">
                 {/* Left filter bar */}
                 <div className="mr-15 py-1 overflow-y-auto scrollbar-hide w-[20%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center">
                     <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-10 font-['Jersey_10']">Logged in as: </p>
@@ -283,7 +283,7 @@ function MyKitchen({ isLoggedIn }) {
                             handleEnterOld(e);
                         }
                         }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-3 p-3 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
                         placeholder="Old Password..."
                     />
 
@@ -297,7 +297,7 @@ function MyKitchen({ isLoggedIn }) {
                             handleEnterNew(e);
                         }
                         }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-3 p-3 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
                         placeholder="New Password..."
                     />
 
@@ -311,13 +311,13 @@ function MyKitchen({ isLoggedIn }) {
                             handleEnterNewConfirm(e);
                         }
                         }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-3 p-3 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
                         placeholder="Confirm New Password..."
                     /> 
 
-                    <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-10 font-['Jersey_10']">Saved Recipes: {countRecipes} </p>
+                    <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-5 font-['Jersey_10']">Saved Recipes: {countRecipes} </p>
 
-                    <img className="mt-auto w-[100px] sm:w-[120px] animate-bounce ease-in-out [animation-duration:2s]" 
+                    <img className="my-auto w-[100px] sm:w-[120px] animate-bounce ease-in-out [animation-duration:2s]" 
                     src="/pizza.png" 
                     alt="Pizza"/>
 

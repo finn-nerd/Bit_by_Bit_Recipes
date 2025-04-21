@@ -217,7 +217,7 @@ function Home({ isLoggedIn }) {
   const handleClick = () => router.push(`/my_kitchen`)
 
   return (
-    <div className="App">
+    <div className="App flex flex-col min-h-screen">
 
       {/* Top bar */}
       <div className="py-1 top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
@@ -289,7 +289,7 @@ function Home({ isLoggedIn }) {
       </div>
 
       {/* Rest of the page */}
-      <div className="flex flex-row flex-grow min-h-screen">
+      <div className="flex flex-row flex-grow">
         {/* Left filter bar */}
         <div className="py-1 overflow-y-auto scrollbar-hide w-[13%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-5">
 
