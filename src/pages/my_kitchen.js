@@ -22,11 +22,19 @@ function MyKitchen({ isLoggedIn }) {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+    const [passwordFeedback, setPasswordFeedback] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
 
     // If the user is not logged in, prompt them
     const backRedirect = () => router.back();
     const loginRedirect = () => router.push('/login');
     const homeRedirect = () => router.push('/home');
+
+    useEffect(() => {
+        if (passwordFeedback !== '') {
+          setPasswordSuccess('');
+        }
+      }, [passwordFeedback]);
     
 
     // Logout functionality
@@ -55,17 +63,17 @@ function MyKitchen({ isLoggedIn }) {
         e.preventDefault();
         
         if (!oldPassword) {
-        alert('Please enter your current password');
+        setPasswordFeedback('Please enter your current password.');
         return;
         }
         
         if (!newPassword) {
-        alert('Please enter a new password');
+        setPasswordFeedback('Please enter a new password.');
         return;
         }
         
         if (newPassword !== newPasswordConfirm) {
-        alert('New passwords do not match');
+        setPasswordFeedback('New passwords do not match.');
         return;
         }
         
@@ -84,11 +92,15 @@ function MyKitchen({ isLoggedIn }) {
         const data = await res.json();
         
         if (!res.ok) {
-            alert(data.message || 'Error changing password');
+            setPasswordFeedback(data.message || 'Error changing password.');
             return;
         }
         
-        alert('Password changed successfully');
+        setPasswordFeedback('');
+        setPasswordSuccess('Password changed successfully!');
+        setTimeout(() => {
+            setPasswordSuccess('');
+          }, 3000)
         
         // Clear the password fields
         setOldPassword('');
@@ -97,7 +109,7 @@ function MyKitchen({ isLoggedIn }) {
         
         } catch (error) {
         console.error('Error changing password:', error);
-        alert('An error occurred while changing your password');
+        setPasswordFeedback('An error occurred while changing your password.');
         }
     };
 
@@ -271,18 +283,8 @@ function MyKitchen({ isLoggedIn }) {
         }
     };
     
-    // bar for old password
-    const handleEnterOld = async (e) => {
-        e.preventDefault();
-    };
-
-    // bar for new password
-    const handleEnterNew = async (e) => {
-        e.preventDefault();
-    };
-
-    // bar for new password
-    const handleEnterNewConfirm = async (e) => {
+    // Change password on submit
+    const handleEnter = async (e) => {
         e.preventDefault();
         handlePasswordChange(e);
     };
@@ -317,47 +319,93 @@ function MyKitchen({ isLoggedIn }) {
 
                     <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-10 font-['Jersey_10']">Change Password: </p>
 
-                    {/* Old password bar */}
-                    <input
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleEnterOld(e);
-                        }
-                        }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
-                        placeholder="Old Password..."
-                    />
+                    
+                    <form autoComplete="off">
 
-                    {/* New password bar */}
-                    <input
-                        type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleEnterNew(e);
-                        }
-                        }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
-                        placeholder="New Password..."
-                    />
+                        {/* Dummy password to dupe autofill */}
+                        <input type="password" style={{ display: 'none' }} />
+                        
+                        {/* Old password bar */}
+                        <input
+                            type="password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleEnter(e);
+                            }
+                            }}
+                            className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                            placeholder="Old Password"
+                        />
 
-                    {/* Confirm new password bar */}
-                    <input
-                        type="password"
-                        value={newPasswordConfirm}
-                        onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                        onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleEnterNewConfirm(e);
-                        }
-                        }}
-                        className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
-                        placeholder="Confirm New Password..."
-                    /> 
+                        {/* New password bar */}
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleEnter(e);
+                            }
+                            }}
+                            className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                            placeholder="New Password"
+                        />
+
+                        {/* Confirm new password bar */}
+                        <input
+                            type="password"
+                            value={newPasswordConfirm}
+                            onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                            onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleEnter(e);
+                            }
+                            }}
+                            className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-full max-w-[70%] mx-9 my-1 px-3 py-1 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+                            placeholder="Confirm New Password"
+                        />
+
+                        {/* Password Change Form Feedback */}
+                        <p className="text-[#EB4B4B] w-[80%] mx-auto text-[20px] font-['Jersey_10'] leading-tight text-center"
+                        style={{
+                            textShadow:
+                            `-1px -1px 0 white,
+                            1px -1px 0 white,
+                            -1px  1px 0 white,
+                            1px  1px 0 white,
+                            0px  1px 0 white,
+                            1px  0px 0 white,
+                            0px -1px 0 white,
+                            -1px  0px 0 white`
+                        }}>
+                        {passwordFeedback}
+                        </p>
+                        <p className="text-black w-[80%] mx-auto text-[20px] font-['Jersey_10'] leading-tight text-center"
+                        style={{
+                            textShadow:
+                            `-1px -1px 0 white,
+                            1px -1px 0 white,
+                            -1px  1px 0 white,
+                            1px  1px 0 white,
+                            0px  1px 0 white,
+                            1px  0px 0 white,
+                            0px -1px 0 white,
+                            -1px  0px 0 white`
+                        }}>
+                        {passwordSuccess}
+                        </p>
+
+                        {/* Change Button */}
+                        <button
+                            className="cursor-pointer m-2 bg-[#EB4B4B] text-white text-xl px-2 py-1 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']"
+                            type="button"
+                            onClick={handlePasswordChange}
+                        >
+                            Change
+                        </button>
+                    </form>
 
                     <p className="text-xl sm:text-2xl xl:text-[30px] text-black pt-5 font-['Jersey_10']">Saved Recipes: {countRecipes} </p>
 

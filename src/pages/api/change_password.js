@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const { oldPassword, newPassword } = req.body;
   
   if (!oldPassword || !newPassword) {
-    return res.status(400).json({ message: 'Old and new passwords are required' });
+    return res.status(400).json({ message: 'Old and new passwords are required.' });
   }
   
   try {
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       );
       
       if (userResult.rows.length === 0) {
-        return { status: 404, data: { message: 'User not found' } };
+        return { status: 404, data: { message: 'User not found.' } };
       }
       
       // Verify old password
@@ -33,11 +33,16 @@ export default async function handler(req, res) {
       const passwordMatch = await bcrypt.compare(oldPassword, currentPasswordHash);
       
       if (!passwordMatch) {
-        return { status: 401, data: { message: 'Current password is incorrect' } };
+        return { status: 401, data: { message: 'Current password is incorrect.' } };
       }
       
       // Hash the new password
       const newPasswordHash = await bcrypt.hash(newPassword, 10);
+      const samePasswordMatch = await bcrypt.compare(oldPassword, newPasswordHash);
+
+      if (samePasswordMatch) {
+        return { status: 401, data: { message: 'New and old passwords can\'t be identical.' } };
+      }
       
       // Update the password
       await client.query(
@@ -45,7 +50,7 @@ export default async function handler(req, res) {
         [newPasswordHash, user.id]
       );
       
-      return { status: 200, data: { message: 'Password updated successfully' } };
+      return { status: 200, data: { message: 'Password updated successfully!' } };
     });
     
     return res.status(result.status).json(result.data);
