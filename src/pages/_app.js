@@ -1,8 +1,8 @@
 // This acts as the entry point for the app, and wraps all pages.
 
 // Import global styles to apply to all pages
-import '../../styles/app.css';
-import { useState, useEffect } from 'react'; // For client-side logic
+import "../../styles/app.css";
+import { useState, useEffect } from "react"; // For client-side logic
 import { Geist, Geist_Mono } from "next/font/google"; // Import fonts
 
 // Declare fonts but avoid executing font loading on the server-side
@@ -31,12 +31,10 @@ function _App({ Component, pageProps }) {
     }
 
     return (
-    <div className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Component {...pageProps} />
-    </div>
+        <div className={`${geistSans.variable} ${geistMono.variable}`}>
+            <Component {...pageProps} />
+        </div>
     );
 }
 
 export default _App;
-
-

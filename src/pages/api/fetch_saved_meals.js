@@ -1,10 +1,10 @@
-import db, { withClient } from './db'
-import getUserFromReq from './auth';
+import db, { withClient } from "./db";
+import getUserFromReq from "./auth";
 
 export default async function handler(req, res) {
     const { method } = req;
 
-    if (method !== 'GET') {
+    if (method !== "GET") {
         return res.status(405).json({ error: `Method ${method} not allowed` });
     }
 
@@ -23,26 +23,26 @@ export default async function handler(req, res) {
                  FROM saved_recipes sr
                  JOIN recipes r ON sr.recipe_id = r.id
                  WHERE sr.user_id = $1`,
-                [user.id]
+                [user.id],
             );
-            
-            const savedMeals = rows.map(r => ({
-                mealID: r.mealdb_id, 
+
+            const savedMeals = rows.map((r) => ({
+                mealID: r.mealdb_id,
                 recipeID: r.recipe_id, // Local ID
                 mealName: r.recipe_name,
-                mealThumbnail: r.img_url
+                mealThumbnail: r.img_url,
             }));
-            
+
             return {
                 status: 200,
-                data: { savedMeals: savedMeals || [] }
+                data: { savedMeals: savedMeals || [] },
             };
         });
 
         return res.status(result.status).json(result.data);
     } catch (err) {
         // auth error or DB error
-        console.error('Error fetching saved meals:', err);
+        console.error("Error fetching saved meals:", err);
         return res.status(err.status || 500).json({ error: err.message });
     }
 }

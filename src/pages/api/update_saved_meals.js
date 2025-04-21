@@ -1,87 +1,78 @@
-import db, { withClient } from './db'
-import getUserFromReq from './auth'; 
+import db, { withClient } from "./db";
+import getUserFromReq from "./auth";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+    if (req.method !== "POST") {
+        return res.status(405).json({ message: "Method Not Allowed" });
+    }
 
-  let user;
-  try {
-    user = await getUserFromReq(req);
-  } catch (err) {
-    return res.status(err.status || 401).json({ message: err.message });
-  }
+    let user;
+    try {
+        user = await getUserFromReq(req);
+    } catch (err) {
+        return res.status(err.status || 401).json({ message: err.message });
+    }
 
-  
-  // Set variables for the information fields
-  const mealID = req.body.mealID
-  const mealName = req.body.mealName
-  const mealThumbnail = req.body.mealThumbnail
-  const isSaved = req.body.mealIsSaved
+    // Set variables for the information fields
+    const mealID = req.body.mealID;
+    const mealName = req.body.mealName;
+    const mealThumbnail = req.body.mealThumbnail;
+    const isSaved = req.body.mealIsSaved;
 
-  if (
-    !mealID ||
-    typeof isSaved !== 'boolean' ||
-    (isSaved && (!mealName || !mealThumbnail))
-  ) {
-    return res.status(400).json({ message: 'Missing or invalid meal information' });
-  }
+    if (!mealID || typeof isSaved !== "boolean" || (isSaved && (!mealName || !mealThumbnail))) {
+        return res.status(400).json({ message: "Missing or invalid meal information" });
+    }
 
-  try {
-    const result = await withClient(async (client) => {
-      if (isSaved) {
-        // Upsert into recipes table
-        const upsert = await client.query(
-          `INSERT INTO recipes (mealdb_id, name, thumbnail)
+    try {
+        const result = await withClient(async (client) => {
+            if (isSaved) {
+                // Upsert into recipes table
+                const upsert = await client.query(
+                    `INSERT INTO recipes (mealdb_id, name, thumbnail)
            VALUES ($1, $2, $3)
            ON CONFLICT (mealdb_id)
              DO UPDATE SET
                name      = EXCLUDED.name,
                thumbnail = EXCLUDED.thumbnail
            RETURNING id`,
-          [mealID, mealName, mealThumbnail]
-        );
-        const localRecipeId = upsert.rows[0].id;
-  
-        // Insert into saved_recipes using that local ID
-        await client.query(
-          `INSERT INTO saved_recipes (user_id, recipe_id, recipe_name, img_url)
+                    [mealID, mealName, mealThumbnail],
+                );
+                const localRecipeId = upsert.rows[0].id;
+
+                // Insert into saved_recipes using that local ID
+                await client.query(
+                    `INSERT INTO saved_recipes (user_id, recipe_id, recipe_name, img_url)
            VALUES ($1, $2, $3, $4)
            ON CONFLICT (user_id, recipe_id) DO NOTHING`,
-           [user.id, localRecipeId, mealName, mealThumbnail]
-        );
-  
-        return { 
-          status: 200, 
-          data: { message: `Successfully saved meal ${mealID}: ${mealName}` }
-        };
-  
-      } else {
-        // Unsave
-        const got = await client.query(
-          `SELECT id FROM recipes WHERE mealdb_id = $1`,
-          [mealID]
-        );
-        if (got.rows.length) {
-          const localRecipeId = got.rows[0].id;
-          await client.query(
-            `DELETE FROM saved_recipes
+                    [user.id, localRecipeId, mealName, mealThumbnail],
+                );
+
+                return {
+                    status: 200,
+                    data: { message: `Successfully saved meal ${mealID}: ${mealName}` },
+                };
+            } else {
+                // Unsave
+                const got = await client.query(`SELECT id FROM recipes WHERE mealdb_id = $1`, [mealID]);
+                if (got.rows.length) {
+                    const localRecipeId = got.rows[0].id;
+                    await client.query(
+                        `DELETE FROM saved_recipes
               WHERE user_id   = $1
                 AND recipe_id = $2`,
-            [user.id, localRecipeId]
-          );
-        }
-        return { 
-          status: 200, 
-          data: { message: `Successfully unsaved meal ${mealID}` }
-        };
-      }
-    });
+                        [user.id, localRecipeId],
+                    );
+                }
+                return {
+                    status: 200,
+                    data: { message: `Successfully unsaved meal ${mealID}` },
+                };
+            }
+        });
 
-    return res.status(result.status).json(result.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
+        return res.status(result.status).json(result.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 }
