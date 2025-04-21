@@ -437,14 +437,19 @@ function MyKitchen({ isLoggedIn }) {
                             meals.map((meal) => {
                                 const isSaved = true;
                                 return (
-                                    <div
-                                        key={meal.mealID}
-                                        onClick={() => handleRedirect(meal.mealID)}
-                                        className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
+                                    <a
+                                        href={`/recipes/${meal.mealID}`}
+                                        key={meal.idMeal}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleRedirect(meal.mealID);
+                                        }}
+                                        className="block cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
                                     >
                                         {/* Favorite Button */}
                                         <button
                                             onClick={(e) => {
+                                                e.preventDefault();
                                                 e.stopPropagation(); // Prevent triggering onClick of the card
                                                 unsaveMeal(meal);  // Send meal to backend to be favorited/unfavorited
                                             }}
@@ -470,7 +475,7 @@ function MyKitchen({ isLoggedIn }) {
                                         <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
                                             <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.mealName}</p>
                                         </div>
-                                    </div>
+                                    </a>
                                 )
                             })
                         ) : (
