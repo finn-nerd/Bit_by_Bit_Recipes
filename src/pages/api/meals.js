@@ -54,12 +54,10 @@ export default async function handler(req, res) {
     }
     // Apply ingredient filter
     if (Array.isArray(filteredIngredients) && filteredIngredients.length > 0) {
-        // Uncomment this when API key is implemented
-        // const csvIngredients = filteredIngredients
-        //     .map(ingredient => ingredient.trim()) // Trim each ingredient
-        //     .join(','); // Join with commas
-        const csvIngredients = filteredIngredients[0].trim();
-        const ingResponse = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${csvIngredients}`);
+        const csvIngredients = filteredIngredients
+            .map(ingredient => ingredient.trim()) // Trim each ingredient
+            .join(','); // Join with commas
+        const ingResponse = await fetch(`https://www.themealdb.com/api/json/v2/${process.env.API_KEY}/filter.php?i=${csvIngredients}`);
         const ingResult = await ingResponse.json();
         if (ingResult.meals) {
             if (!data) // no data yet, initialize
