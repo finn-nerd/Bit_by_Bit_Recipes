@@ -192,15 +192,7 @@ function MyKitchen({ isLoggedIn }) {
             }
     
             const data = await res.json();
-            console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"
-            
-            // Refresh the meals list after a successful update
-            if (!mealIsSaved) {
-                setTimeout(() => {
-                    fetchSavedMeals();
-                }, 500);
-            }
-    
+            console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"  
         } catch (err) {
             console.error('Error saving meal:', err);
         }
@@ -257,7 +249,7 @@ function MyKitchen({ isLoggedIn }) {
                     </button>
 
                     {/* Welcome message */}
-                    <h1 className="ml-auto text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 font-['Jersey_10']">Welcome {username}!</h1>
+                    <h1 className="ml-auto text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 font-['Jersey_10']">Welcome, {username}!</h1>
 
                     {/* My Kitchen page */}
                     <h1 className="ml-auto bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">My Kitchen</h1>
