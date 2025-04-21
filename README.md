@@ -9,9 +9,9 @@ Create an account to save your favorite recipes, or browse as a guest.
 
 *Created as a final project for CEN3031 - Software Engineering by a 4-person group.*
 
-<small>
-Developed using React, Next.js, and Node.js.<br>
-Meal data sourced from TheMealDB.<br>
-Database managed using PostgreSQL, hosted on Heroku.<br>
-Deployed with Vercel.
-</small>
+<br><br>
+
+- Developed using React, Next.js, and Node.js.<br>
+- Meal data sourced from TheMealDB.<br>
+- Database managed using PostgreSQL, hosted on Heroku.<br>
+- Deployed with Vercel.
