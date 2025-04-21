@@ -50,6 +50,57 @@ function MyKitchen({ isLoggedIn }) {
         }
     };
 
+    // Change password functionality
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        
+        if (!oldPassword) {
+        alert('Please enter your current password');
+        return;
+        }
+        
+        if (!newPassword) {
+        alert('Please enter a new password');
+        return;
+        }
+        
+        if (newPassword !== newPasswordConfirm) {
+        alert('New passwords do not match');
+        return;
+        }
+        
+        try {
+        const res = await fetch('/api/change_password', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            oldPassword,
+            newPassword,
+            }),
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+            alert(data.message || 'Error changing password');
+            return;
+        }
+        
+        alert('Password changed successfully');
+        
+        // Clear the password fields
+        setOldPassword('');
+        setNewPassword('');
+        setNewPasswordConfirm('');
+        
+        } catch (error) {
+        console.error('Error changing password:', error);
+        alert('An error occurred while changing your password');
+        }
+    };
+
     // Return a different page if the user is not logged in
     if (!isLoggedIn)
         return (
@@ -233,6 +284,7 @@ function MyKitchen({ isLoggedIn }) {
     // bar for new password
     const handleEnterNewConfirm = async (e) => {
         e.preventDefault();
+        handlePasswordChange(e);
     };
 
     return (
@@ -267,7 +319,7 @@ function MyKitchen({ isLoggedIn }) {
 
                     {/* Old password bar */}
                     <input
-                        type="text"
+                        type="password"
                         value={oldPassword}
                         onChange={(e) => setOldPassword(e.target.value)}
                         onKeyDown={(e) => {
@@ -281,7 +333,7 @@ function MyKitchen({ isLoggedIn }) {
 
                     {/* New password bar */}
                     <input
-                        type="text"
+                        type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         onKeyDown={(e) => {
@@ -295,7 +347,7 @@ function MyKitchen({ isLoggedIn }) {
 
                     {/* Confirm new password bar */}
                     <input
-                        type="text"
+                        type="password"
                         value={newPasswordConfirm}
                         onChange={(e) => setNewPasswordConfirm(e.target.value)}
                         onKeyDown={(e) => {
