@@ -34,6 +34,10 @@ function MyKitchen({ isLoggedIn }) {
         if (passwordFeedback !== '')
           setPasswordSuccess('');
       }, [passwordFeedback]);
+
+    useEffect(() => {
+        setCountRecipes(meals.length);
+    }, [meals]);
     
 
     // Logout functionality
