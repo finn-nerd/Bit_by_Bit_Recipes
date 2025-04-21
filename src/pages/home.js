@@ -199,6 +199,17 @@ function Home({ isLoggedIn }) {
     router.push(`/recipes/${recipeID}`);
   }
 
+  // random meal button
+  const handleRandom = async () => {
+    try {
+        const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+        const data = await response.json();
+        router.push(`/recipes/${data.meals[0].idMeal}`);
+    } catch (error) {
+        console.error('Error fetching random meal:', error);
+    }
+  }
+
   // sidebar
   const toggleSidebar = () => setOpenSidebar(!openSidebar);
   const closeSidebar = () => setOpenSidebar(false);
@@ -210,7 +221,7 @@ function Home({ isLoggedIn }) {
 
       {/* Top bar */}
       <div className="py-1 top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
-        <div className="flex items-center my-5">
+        <div className="flex flex-row gap-3 items-center my-5">
           <button 
           onClick={toggleSidebar} // if user clicks button, open sidebar
           className="cursor-pointer bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10'] z-20">
@@ -226,13 +237,52 @@ function Home({ isLoggedIn }) {
                 handleEnter(e);
               }
             }}
-            className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[35px] w-full max-w-[70%] pl-10 p-3 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
+            className="relative ml-auto bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[35px] w-full max-w-[50%] pl-10 p-3 rounded-[25px] border-[4px] border-[#C13737] font-['Jersey_10'] z-20"
             placeholder="Search for a recipe here..."
           />
 
+            {/* Random Recipe */}
+            <button className="cursor-pointer p-2 hover:scale-105 transition-transform ml-auto btn-active no-shadow"
+            onClick={handleRandom}>
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-12 h-12 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                >
+                <polyline points="16 3 21 3 21 8" />
+                <line x1="4" y1="20" x2="21" y2="3" />
+                <polyline points="21 16 21 21 16 21" />
+                <line x1="15" y1="15" x2="21" y2="21" />
+                <line x1="4" y1="4" x2="9" y2="9" />
+                </svg>
+            </button>
+
+            {/* Refresh Recipes */}
+            <button className="cursor-pointer p-2 ml-auto flex items-center justify-center no-shadow"
+            onClick={() => fetchMeals()}>
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-12 h-12 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                >
+                    <polyline points="22.5 6 22.5 12 17.5 12" />
+                    <path d="M20.49 15A9 9 0 1 1 21 12" />
+                </svg>
+            </button>
+
           <button 
           onClick={handleClick}
-          className="cursor-pointer bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">
+          className="cursor-pointer ml-auto bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">
             My Kitchen
           </button>
         </div>

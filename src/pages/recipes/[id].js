@@ -91,6 +91,16 @@ function Recipe({ meal, isLoggedIn }) {
         }
     }
 
+    const handleRandom = async () => {
+        try {
+            const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+            const data = await response.json();
+            router.push(`/recipes/${data.meals[0].idMeal}`);
+        } catch (error) {
+            console.error('Error fetching random meal:', error);
+        }
+    }
+
     const redirectHome = () => router.push('../home');
     const redirectKitchen = () => router.push(`/my_kitchen`)
 
@@ -135,6 +145,27 @@ function Recipe({ meal, isLoggedIn }) {
             {/* Rest of page */}
             <div className="pt-5 px-10 relative">
 
+                {/* Random Recipe */}
+                <button className="absolute top-5 right-5 cursor-pointer p-2 hover:scale-105 transition-transform ml-auto btn-active no-shadow"
+                onClick={handleRandom}>
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="w-12 h-12 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    >
+                    <polyline points="16 3 21 3 21 8" />
+                    <line x1="4" y1="20" x2="21" y2="3" />
+                    <polyline points="21 16 21 21 16 21" />
+                    <line x1="15" y1="15" x2="21" y2="21" />
+                    <line x1="4" y1="4" x2="9" y2="9" />
+                    </svg>
+                </button>
+
                 <div className="flex flex-col lg:flex-row gap-20">
 
                     {/* Left side */}
@@ -144,7 +175,6 @@ function Recipe({ meal, isLoggedIn }) {
                         <img className="w-full object-cover rounded-[12px] mb-5"
                         src={meal.strMealThumb} alt={meal.strMeal} />
  
-
                         {/* Video */}
                         {meal.strYoutube && (
                         <iframe
