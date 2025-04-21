@@ -10,7 +10,13 @@ function Login() {
     const [username, setUsername] = useState(''); // stores username
     const [password, setPassword] = useState(''); // stores username
     const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
+    const [userInputSuccess, setUserInputSuccess] = useState('');
     const router = useRouter(); // used to navigate to diff pages
+
+    useEffect(() => {
+        if (userInputResponse !== '')
+            setUserInputSuccess('');
+    }, [userInputResponse]);
 
     // send input to backend/api
     const handleSubmit = async (e) => {
@@ -26,7 +32,8 @@ function Login() {
           
           // Login successful
           if (response.ok) {
-            setUserInputResponse(data.message);
+            setUserInputResponse('');
+            setUserInputSuccess(data.message);
             // redirect to home page here (when ready)
             router.push('/home')
           } else {
@@ -144,6 +151,20 @@ function Login() {
                   -1px  0px 0 white`
               }}>
               {userInputResponse}
+            </p>
+            <p className="text-black text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
+              style={{
+                textShadow:
+                  `-1px -1px 0 white,
+                  1px -1px 0 white,
+                  -1px  1px 0 white,
+                  1px  1px 0 white,
+                  0px  1px 0 white,
+                  1px  0px 0 white,
+                  0px -1px 0 white,
+                  -1px  0px 0 white`
+              }}>
+              {userInputSuccess}
             </p>
           </div>
 

@@ -8,7 +8,13 @@ function CreateAccount() {
     const [password, setPassword] = useState(''); // stores username
     const [confirmPassword, setConfirmPassword] = useState(''); // stores username
     const [userInputResponse, setUserInputResponse] = useState(''); // stores response from server
+    const [userInputSuccess, setUserInputSuccess] = useState('');
     const router = useRouter(); // set up router
+
+    useEffect(() => {
+        if (userInputResponse !== '')
+            setUserInputSuccess('');
+    }, [userInputResponse]);
 
     // send input to backend/api
     const handleSubmit = async (e) => {
@@ -25,7 +31,8 @@ function CreateAccount() {
           
           if (response.status === 201) {
             // Account was created successfully
-            setUserInputResponse("Account created successfully!");
+            setUserInputResponse('');
+            setUserInputSuccess("Account created successfully!");
           } else {
             setUserInputResponse(data.message || 'Failed to create account.');
           }
@@ -126,6 +133,11 @@ function CreateAccount() {
                         onChange={(e) => setConfirmPassword(e.target.value)} 
                         className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Confirm your password"
+                        onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            handleEnter(e);
+                        }
+                        }}
                     />
 
                     <p className="text-[#EB4B4B] text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
@@ -141,6 +153,20 @@ function CreateAccount() {
                             -1px  0px 0 white`
                         }}>
                         {userInputResponse}
+                    </p>
+                    <p className="text-black text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
+                        style={{
+                            textShadow:
+                            `-1px -1px 0 white,
+                            1px -1px 0 white,
+                            -1px  1px 0 white,
+                            1px  1px 0 white,
+                            0px  1px 0 white,
+                            1px  0px 0 white,
+                            0px -1px 0 white,
+                            -1px  0px 0 white`
+                        }}>
+                        {userInputSuccess}
                     </p>
 
                     {/* submit button to check user authentication */}

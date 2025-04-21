@@ -31,9 +31,8 @@ function MyKitchen({ isLoggedIn }) {
     const homeRedirect = () => router.push('/home');
 
     useEffect(() => {
-        if (passwordFeedback !== '') {
+        if (passwordFeedback !== '')
           setPasswordSuccess('');
-        }
       }, [passwordFeedback]);
     
 
