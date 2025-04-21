@@ -115,6 +115,21 @@ function Login() {
                   className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                   placeholder="Enter your password"
               />
+
+            <p className="text-[#EB4B4B] text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
+              style={{
+                textShadow:
+                  `-2px -2px 0 white,
+                  2px -2px 0 white,
+                  -2px  2px 0 white,
+                  2px  2px 0 white,
+                  0px  2px 0 white,
+                  2px  0px 0 white,
+                  0px -2px 0 white,
+                  -2px  0px 0 white`
+              }}>
+              {userInputResponse}
+            </p>
           </div>
 
           {/* submit button to check user authentication*/}
