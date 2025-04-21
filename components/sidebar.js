@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-function Sidebar({ isOpen, isClose}) {
+function Sidebar({ isOpen, isClose, isLoggedIn}) {
     const sidebarRef = useRef();
     const [visible, setVisible] = useState(false);
     const [showOpen, setShowOpen] = useState(false);
@@ -35,18 +35,44 @@ function Sidebar({ isOpen, isClose}) {
 
     // Fetch username
     const fetchUsername = async () => {
-        try {
-        const res = await fetch(`/api/get_username`);
-        const data = await res.json();
+        if (isLoggedIn) {
+            try {
+                const res = await fetch(`/api/get_username`);
+                const data = await res.json();
 
-        setUsername(data.username);
-        } catch (err) {
-        console.error("Failed to categories:", err);
-        setUsername([]);
+                setUsername(data.username);
+            } catch (err) {
+                console.error("Failed to find username:", err);
+                setUsername([]);
+            }
         }
+        else setUsername([]);
     };
 
-    const handleClick = () => router.push('/login');
+    const handleClick = async () => {
+        // If the user is logged in, log them out
+        if (isLoggedIn) {
+            try {
+                const res = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (res.ok) {
+                    // Redirect to fresh home page after successful logout
+                    router.push('/home');
+                } else {
+                    console.error('Failed to logout');
+                }
+            } catch (err) {
+                console.error('Error during logout:', err);
+            }
+        }
+        // Otherwise, just send them straight to the login page
+        else router.push('/login');
+    }
 
     return (
         <>
@@ -72,8 +98,10 @@ function Sidebar({ isOpen, isClose}) {
                     }
                     >
 
-                        <p className="text-xl sm:text-2xl xl:text-[40px] text-white pt-10 font-['Jersey_10']">Logged in as: </p>
-                        <p className="text-xl sm:text-2xl xl:text-[35px] text-white pt-2 font-['Jersey_10']">{username}</p>
+                        <p className="text-xl sm:text-2xl xl:text-[40px] text-white pt-10 font-['Jersey_10']">{isLoggedIn ? "Logged in as:" : "Not logged in."}</p>
+                        {isLoggedIn && (
+                            <p className="text-xl sm:text-2xl xl:text-[35px] text-white pt-2 font-['Jersey_10']">{username}</p>
+                        )}
 
                         <img className="w-[100px] mt-10 sm:w-[120px] animate-bounce ease-in-out [animation-duration:2s]" 
                         src="/pizza.png" 
@@ -98,7 +126,7 @@ function Sidebar({ isOpen, isClose}) {
                                 type="button"
                                 onClick={handleClick}
                             >
-                                Logout
+                                {isLoggedIn ? "Logout" : "Login"}
                             </button>
                         </div>
                     </div>

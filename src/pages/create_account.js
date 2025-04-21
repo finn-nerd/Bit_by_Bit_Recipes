@@ -34,6 +34,11 @@ function CreateAccount() {
           setUserInputResponse("An error occurred while contacting the server.");
         }
       };
+
+    const handleEnter = async (e) => {
+        e.preventDefault();
+        handleSubmit(e);
+    };
       
     const handleClick = () => router.push('/login');
 
@@ -91,6 +96,11 @@ function CreateAccount() {
                         onChange={(e) => setUsername(e.target.value)} 
                         className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Enter your username"
+                        onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            handleEnter(e);
+                        }
+                        }}
                     />
 
                     {/* password title and input box */}
@@ -101,6 +111,11 @@ function CreateAccount() {
                         onChange={(e) => setPassword(e.target.value)} 
                         className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                         placeholder="Enter your password"
+                        onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            handleEnter(e);
+                        }
+                        }}
                     />
 
                     {/* confirm password title and input box */}

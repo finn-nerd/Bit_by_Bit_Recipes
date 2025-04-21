@@ -38,9 +38,14 @@ function Login() {
         }
       };
       
+      const handleEnter = async (e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      };
 
     // used to navigate to diff page
     const handleClick = () => router.push('/create_account');
+    const handleSkip = () => router.push('/home');
 
     return (
     <div className="App">
@@ -104,6 +109,11 @@ function Login() {
                   onChange={(e) => setUsername(e.target.value)} 
                   className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                   placeholder="Enter your username"
+                  onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEnter(e);
+                  }
+                  }}
               />
 
               {/* password title and input box */}
@@ -114,6 +124,11 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)} 
                   className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                   placeholder="Enter your password"
+                  onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEnter(e);
+                  }
+                  }}
               />
 
             <p className="text-[#EB4B4B] text-[25px] font-['Jersey_10'] leading-tight whitespace-nowrap"
@@ -133,11 +148,16 @@ function Login() {
           </div>
 
           {/* submit button to check user authentication*/}
-          <form className="flex justify-center flex-col items-center" onSubmit={handleSubmit}>
+          <form className="flex justify-center flex-row gap-20 items-center" onSubmit={handleSubmit}>
               {/* submit button to check user authentication*/}
               <button className="cursor-pointer bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
                 type="submit">
                   Login
+              </button>
+              <button className="cursor-pointer bg-[#EB4B4B] w-auto h-auto flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-[55px] text-[white] p-5 rounded-[20px] border-[6px] border-solid border-[#B21F1F] font-['Jersey_10']"
+                type="button"
+                onClick={handleSkip}>
+                  Skip
               </button>
           </form>
 
