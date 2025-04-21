@@ -23,7 +23,7 @@ function Recipe({ meal, isLoggedIn }) {
     // Check if this meal is saved
     useEffect(() => {
         fetchSavedMeal();
-      }, []);
+      }, [meal]);
 
     const fetchSavedMeal = async () => {
         if (isLoggedIn) {
