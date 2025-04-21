@@ -291,7 +291,7 @@ function Home({ isLoggedIn }) {
       {/* Rest of the page */}
       <div className="flex flex-row flex-grow min-h-screen">
         {/* Left filter bar */}
-        <div className="mr-15 py-1 overflow-y-auto scrollbar-hide w-[13%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-5">
+        <div className="py-1 overflow-y-auto scrollbar-hide w-[13%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-5">
 
           <p className="text-xl sm:text-2xl xl:text-[25px] text-black font-['Jersey_10']">Choose a Category: </p>
 
@@ -379,8 +379,8 @@ function Home({ isLoggedIn }) {
         </div>
 
         {/* Meal Cards */}
-        <div className="w-[82%] flex py-15">
-          <div className="flex flex-wrap gap-7">
+        <div className="w-[82%] flex py-15 mx-auto">
+          <div className="flex flex-wrap gap-7 justify-center min-w-0">
               {loading ? (
                 <p className="text-white text-2xl font-bold">Loading...</p>
               ) : meals.length > 0 ? (
@@ -433,6 +433,7 @@ function Home({ isLoggedIn }) {
           )}
         </div>
        </div>
+       
      </div>
 
         {/* sidebar */}
