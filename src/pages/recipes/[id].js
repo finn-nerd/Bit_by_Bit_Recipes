@@ -1,20 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
 
 // Fetch meal that was sent to this page
 export async function getServerSideProps(context) {
     const { id } = context.params;
     const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const data = await res.json();
+
+    const { token } = parseCookies(context);
   
     return {
-        props: { meal: data.meals[0], },
+        props: { meal: data.meals[0], isLoggedIn: Boolean(token) },
     };
 }
 
-function Recipe({ meal }) {
+function Recipe({ meal, isLoggedIn }) {
     const router = useRouter(); // used to navigate to diff pages
     const ingredients = [];
+    const [isSaved, setIsSaved] = useState([]);
+
+    // Check if this meal is saved
+    useEffect(() => {
+        fetchSavedMeal();
+      }, []);
+
+    const fetchSavedMeal = async () => {
+        if (isLoggedIn) {
+            try {
+                const res = await fetch('/api/fetch_saved_meals');
+                if (!res.ok) throw new Error(await res.text());
+                const { savedMeals } = await res.json();
+                setIsSaved(savedMeals.map(m => m.mealID).includes(meal.idMeal));
+            } catch (err) {
+                console.error('Could not load saved recipes:', err);
+            }
+        }
+        else setIsSaved(false);
+    };
+
+    const toggleSavedMeal = () => {
+        // Update local copy of saved IDs
+        const newState = !isSaved // setter is async
+        setIsSaved(newState); // may not run before below call
+        // Update DB
+        updateSavedMeals(meal.idMeal, meal.strMeal, meal.strMealThumb, newState);
+    };
+
+    const updateSavedMeals = async (mealID, mealName, mealThumbnail, mealIsSaved) => {
+        console.log(mealID);
+        console.log(mealName);
+        console.log(mealThumbnail);
+        console.log(mealIsSaved);
+        try {
+            const res = await fetch('/api/update_saved_meals', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mealID,         // ID of the meal
+                    mealName,       // Name of the meal
+                    mealThumbnail,  // Thumbnail image URL
+                    mealIsSaved     // Boolean
+                }),
+            });
+    
+            // Handle non-OK response
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+    
+            const data = await res.json();
+            console.log(data.message); // "Successfully saved meal {mealID}: {mealName}"
+    
+        } catch (err) {
+            console.error('Error saving meal:', err);
+        }
+    }
 
     for(let i = 1; ; i++){
         const ingredient = meal[`strIngredient${i}`];
@@ -27,25 +91,41 @@ function Recipe({ meal }) {
         }
     }
 
-    const handleClick = () => router.push('../home');
-    const handleClick2 = () => router.push(`/my_kitchen`)
+    const redirectHome = () => router.push('../home');
+    const redirectKitchen = () => router.push(`/my_kitchen`)
 
     return (
         <div className="App">
 
             {/* Top bar */}
-            <div className="fixed top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
+            <div className="py-1 top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
                 <div className="flex items-center my-5">
                 <button 
                 className="cursor-pointer bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10'] z-20"
                 type="button" 
-                onClick={handleClick}>
+                onClick={redirectHome}>
                     Back to Home
                 </button>
 
+                {/* Save recipe button */}
+                {isLoggedIn && (
+                    <button 
+                    onClick={toggleSavedMeal}
+                    className="flex flex-row items-center gap-5 cursor-pointer ml-auto bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">
+                        Save Recipe
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className={`w-8 h-8 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                        >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    </button>
+                )}
+
                 {/* My Kitchen page */}
                 <button 
-                onClick={handleClick2}
+                onClick={redirectKitchen}
                 className="cursor-pointer ml-auto bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10']">
                     My Kitchen
                 </button>
@@ -53,7 +133,8 @@ function Recipe({ meal }) {
             </div>
 
             {/* Rest of page */}
-            <div className="pt-[150px] px-10">
+            <div className="pt-5 px-10 relative">
+
                 <div className="flex flex-col lg:flex-row gap-20">
 
                     {/* Left side */}
