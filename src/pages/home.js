@@ -195,96 +195,8 @@ function Home() {
   return (
     <div className="App">
 
-      {/* Left filter bar */}
-      <div className="fixed overflow-y-auto scrollbar-hide left-0 w-[15%] top-[10%] h-[90%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-20">
-
-        <p className="text-xl sm:text-2xl xl:text-[25px] text-black font-['Jersey_10']">Choose a Category: </p>
-
-        {/* Dropdown menu for categories */}
-        <Listbox
-        as='div'
-        value={selectedCat}
-        onChange={handleSelectCat}>
-
-          {/* Dropdown button */}
-          <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
-            {selectedCat || 'Any'}
-          </Listbox.Button>
-
-          {/* Dropdown options */}
-          <Listbox.Options>
-            {categories.map((category, index) => (
-              <Listbox.Option
-              key={index}
-              value={category}
-              className={({active}) =>
-                `cursor-pointer select-none p-2 ${active ? 'bg-[#EF6F34] text-black' : ''}`}
-              >
-                {category}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-          
-        </Listbox>
-
-        <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-5 font-['Jersey_10']">Choose an Area: </p>
-
-        {/* Dropdown menu for area */}
-        <Listbox
-        as='div'
-        value={selectedArea}
-        onChange={handleSelectArea}>
-
-          {/* Dropdown button */}
-          <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
-            {selectedArea || 'Any'}
-          </Listbox.Button>
-
-          {/* Dropdown options */}
-          <Listbox.Options>
-            {areas.map((area, index) => (
-              <Listbox.Option
-              key={index}
-              value={area}
-              className={({active}) =>
-                `cursor-pointer select-none p-2 ${active ? 'bg-[#EF6F34] text-black' : ''}`}
-              >
-                {area}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-          
-        </Listbox>
-
-        <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-5 font-['Jersey_10']">Choose an Ingredient: </p>
-
-        {/* Search bar for ingredients */}
-        <input
-            type="text"
-            value={search_ing}
-            onChange={(e) => setSearch_Ing(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleEnterIng(e);
-              }
-            }}
-            className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-[80%] rounded-[25px] border-[4px] border-[#C13737] mt-3 mb-7 p-3 font-['Jersey_10']"
-            placeholder="Chicken"
-          />
-
-        {/* Current Ingredients */}
-        <div className="flex flex-wrap gap-3 p-5 justify-center">
-            {filteredIngredients.map((ing, idx) => (
-            <button key={idx} className="bg-[#f05d4a] text-xl px-3 py-1 rounded-full cursor-pointer font-['Jersey_10']" onClick={() => removeIngredient(ing)}>
-                {ing}
-            </button>
-            ))}
-        </div>
-
-      </div>
-
       {/* Top bar */}
-      <div className="fixed top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
+      <div className="py-1 top-0 left-0 w-full bg-gradient-to-b from-[#F18D5E] to-[#EF6F34] z-10">
         <div className="flex items-center my-5">
           <button 
           onClick={toggleSidebar} // if user clicks button, open sidebar
@@ -313,59 +225,152 @@ function Home() {
         </div>
       </div>
 
-      {/* Meal Cards */}
-      <div className="flex flex-wrap justify-center mt-[180px] pb-10 pl-[16%] gap-7">
+      {/* Rest of the page */}
+      <div className="flex flex-row flex-grow min-h-screen">
+        {/* Left filter bar */}
+        <div className="mr-15 py-1 overflow-y-auto scrollbar-hide w-[13%] bg-gradient-to-b from-[#EEAE36] to-[#E97832] z-1 flex flex-col items-center pt-5">
 
-        {loading ? (
-          <p className="text-white text-2xl font-bold">Loading...</p>
-        ) : meals.length > 0 ? (
-          meals.map((meal) => {
-            const isSaved = savedMeals.includes(meal.idMeal);
-            return (
-                <div
-                key={meal.idMeal}
-                onClick={() => handleRedirect(meal.idMeal)}
-                className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
+          <p className="text-xl sm:text-2xl xl:text-[25px] text-black font-['Jersey_10']">Choose a Category: </p>
+
+          {/* Dropdown menu for categories */}
+          <Listbox
+          as='div'
+          value={selectedCat}
+          onChange={handleSelectCat}>
+
+            {/* Dropdown button */}
+            <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
+              {selectedCat || 'Any'}
+            </Listbox.Button>
+
+            {/* Dropdown options */}
+            <Listbox.Options>
+              {categories.map((category, index) => (
+                <Listbox.Option
+                key={index}
+                value={category}
+                className={({active}) =>
+                  `cursor-pointer select-none p-2 ${active ? 'bg-[#EF6F34] text-black' : ''}`}
                 >
-                {/* Favorite Button */}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering onClick of the card
-                        toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
-                    }}
-                    className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
+                  {category}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+            
+          </Listbox>
+
+          <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-5 font-['Jersey_10']">Choose an Area: </p>
+
+          {/* Dropdown menu for area */}
+          <Listbox
+          as='div'
+          value={selectedArea}
+          onChange={handleSelectArea}>
+
+            {/* Dropdown button */}
+            <Listbox.Button className="w-full cursor-pointer text-xl sm:text-2xl xl:text-[22px] text-black py-3 focus:outline-none opacity-[60%] font-['Jersey_10']">
+              {selectedArea || 'Any'}
+            </Listbox.Button>
+
+            {/* Dropdown options */}
+            <Listbox.Options>
+              {areas.map((area, index) => (
+                <Listbox.Option
+                key={index}
+                value={area}
+                className={({active}) =>
+                  `cursor-pointer select-none p-2 ${active ? 'bg-[#EF6F34] text-black' : ''}`}
                 >
-                    <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                  {area}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+            
+          </Listbox>
+
+          <p className="text-xl sm:text-2xl xl:text-[25px] text-black pt-5 font-['Jersey_10']">Choose an Ingredient: </p>
+
+          {/* Search bar for ingredients */}
+          <input
+              type="text"
+              value={search_ing}
+              onChange={(e) => setSearch_Ing(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleEnterIng(e);
+                }
+              }}
+              className="relative bg-[#E65340] text-black text-base sm:text-lg md:text-xl lg:text-[20px] w-[80%] rounded-[25px] border-[4px] border-[#C13737] mt-3 mb-7 p-3 font-['Jersey_10']"
+              placeholder="Chicken"
+            />
+
+          {/* Current Ingredients */}
+          <div className="flex flex-wrap gap-3 p-5 justify-center">
+              {filteredIngredients.map((ing, idx) => (
+              <button key={idx} className="bg-[#f05d4a] text-xl px-3 py-1 rounded-full cursor-pointer font-['Jersey_10']" onClick={() => removeIngredient(ing)}>
+                  {ing}
+              </button>
+              ))}
+          </div>
+
+        </div>
+
+        {/* Meal Cards */}
+        <div className="w-[82%] flex py-15">
+          <div className="flex flex-wrap gap-7">
+
+            {loading ? (
+              <p className="text-white text-2xl font-bold">Loading...</p>
+            ) : meals.length > 0 ? (
+              meals.map((meal) => {
+                const isSaved = savedMeals.includes(meal.idMeal);
+                return (
+                    <div
+                    key={meal.idMeal}
+                    onClick={() => handleRedirect(meal.idMeal)}
+                    className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
                     >
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                </button>
-                {/* Recipe Image */}
-                <div className="flex-1" style={{ height: '65%' }}>
-                    <img
-                    src={meal.strMealThumb}
-                    alt={meal.strMeal}
-                    className="w-full h-full object-cover rounded-t-[12px]"
-                    />
-                </div>
-                {/* Recipe Title */}
-                <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
-                    <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
-                </div>
-                </div>
-                )
-            }
-          )
-        ) : (
-          <p className="text-white text-2xl font-bold">{userInputResponse}</p>
-        )}
+                    {/* Favorite Button */}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent triggering onClick of the card
+                            toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
+                        }}
+                        className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
+                    >
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+                        >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    </button>
+                    {/* Recipe Image */}
+                    <div className="flex-1" style={{ height: '65%' }}>
+                        <img
+                        src={meal.strMealThumb}
+                        alt={meal.strMeal}
+                        className="w-full h-full object-cover rounded-t-[12px]"
+                        />
+                    </div>
+                    {/* Recipe Title */}
+                    <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
+                        <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
+                    </div>
+                    </div>
+                    )
+                }
+              )
+            ) : (
+              <p className="text-white text-2xl font-bold">{userInputResponse}</p>
+            )}
+          </div>
+        </div>
       </div>
 
-        {/* sidebar */}
-        <Sidebar isOpen={openSidebar} isClose={closeSidebar} />
+      {/* sidebar */}
+      <Sidebar isOpen={openSidebar} isClose={closeSidebar} />
 
     </div>
   );
