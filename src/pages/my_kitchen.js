@@ -334,8 +334,8 @@ function MyKitchen({ isLoggedIn }) {
                 </div>
 
                 {/* Meal Cards */}
-                <div className="w-[80%] flex py-15">
-                    <div className="flex flex-wrap gap-7">
+                <div className="w-[80%] py-15 mx-auto">
+                    <div className="flex flex-wrap gap-7 justify-center items-start">
                         {loading ? (
                             <p className="text-white text-2xl font-bold">Loading...</p>
                         ) : meals.length > 0 ? (
@@ -379,7 +379,7 @@ function MyKitchen({ isLoggedIn }) {
                                 )
                             })
                         ) : (
-                            <p className="text-white text-2xl font-bold">{userInputResponse}</p>
+                            <p className="text-white text-2xl font-bold">Your saved recipes will show up here.</p>
                         )}
                     </div>
                 </div>

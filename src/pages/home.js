@@ -379,8 +379,8 @@ function Home({ isLoggedIn }) {
         </div>
 
         {/* Meal Cards */}
-        <div className="w-[82%] flex py-15 mx-auto">
-          <div className="flex flex-wrap gap-7 justify-center min-w-0">
+        <div className="w-[82%] py-15 mx-auto">
+          <div className="flex flex-wrap gap-7 justify-center items-start">
               {loading ? (
                 <p className="text-white text-2xl font-bold">Loading...</p>
               ) : meals.length > 0 ? (
