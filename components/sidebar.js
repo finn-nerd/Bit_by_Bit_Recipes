@@ -61,8 +61,8 @@ function Sidebar({ isOpen, isClose, isLoggedIn}) {
                 });
                 
                 if (res.ok) {
-                    // Redirect to login page after successful logout
-                    router.push('/login');
+                    // Redirect to fresh home page after successful logout
+                    router.push('/home');
                 } else {
                     console.error('Failed to logout');
                 }
