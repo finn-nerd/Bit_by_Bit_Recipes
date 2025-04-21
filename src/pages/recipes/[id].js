@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
@@ -23,7 +24,7 @@ function Recipe({ meal, isLoggedIn }) {
     // Check if this meal is saved
     useEffect(() => {
         fetchSavedMeal();
-      }, [meal]);
+    }, [meal]);
 
     const fetchSavedMeal = async () => {
         if (isLoggedIn) {
@@ -105,6 +106,10 @@ function Recipe({ meal, isLoggedIn }) {
     const redirectKitchen = () => router.push(`/my_kitchen`)
 
     return (
+    <>
+        <Head>
+            <title>{meal.strMeal} • Bit by Bit Recipes</title>
+        </Head>
         <div className="App">
 
             {/* Top bar */}
@@ -247,6 +252,7 @@ function Recipe({ meal, isLoggedIn }) {
                 </div>
             </div>
         </div>
+    </>
     );
 
 

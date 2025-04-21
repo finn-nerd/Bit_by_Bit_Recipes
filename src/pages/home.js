@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Sidebar from '../../components/sidebar'
@@ -217,6 +218,10 @@ function Home({ isLoggedIn }) {
   const handleClick = () => router.push(`/my_kitchen`)
 
   return (
+    <>
+    <Head>
+        <title>Home • Bit by Bit Recipes</title>
+    </Head>
     <div className="App flex flex-col min-h-screen">
 
       {/* Top bar */}
@@ -446,6 +451,7 @@ function Home({ isLoggedIn }) {
         <Sidebar isOpen={openSidebar} isClose={closeSidebar} isLoggedIn={isLoggedIn}/>
 
     </div>
+  </>
   );
 
 }

@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
@@ -293,6 +294,10 @@ function MyKitchen({ isLoggedIn }) {
     };
 
     return (
+    <>
+        <Head>
+            <title>My Kitchen • Bit by Bit Recipes</title>
+        </Head>
         <div className="App min-h-screen flex flex-col">
 
             {/* Top bar */}
@@ -484,9 +489,8 @@ function MyKitchen({ isLoggedIn }) {
                     </div>
                 </div>
             </div>
-
-            
         </div>
+    </>
     );
 }
 

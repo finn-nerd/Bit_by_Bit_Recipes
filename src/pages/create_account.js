@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -50,6 +51,10 @@ function CreateAccount() {
     const handleClick = () => router.push('/login');
 
     return (
+    <>
+        <Head>
+            <title>Create Account • Bit by Bit Recipes</title>
+        </Head>
         <div className="App">
             {/* blocks for background aesthetics */}
             <div className="fixed top-0 left-0 w-[35%] h-[10%] bg-[#F05353] z-0"></div>
@@ -189,6 +194,7 @@ function CreateAccount() {
                 </div>
             </header>
         </div>
+    </>
     );
 
 
