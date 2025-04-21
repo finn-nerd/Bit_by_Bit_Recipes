@@ -38,6 +38,10 @@ function Login() {
         }
       };
       
+      const handleEnter = async (e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      };
 
     // used to navigate to diff page
     const handleClick = () => router.push('/create_account');
@@ -104,6 +108,11 @@ function Login() {
                   onChange={(e) => setUsername(e.target.value)} 
                   className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                   placeholder="Enter your username"
+                  onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEnter(e);
+                  }
+                  }}
               />
 
               {/* password title and input box */}
@@ -114,6 +123,11 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)} 
                   className="bg-[#F3E0A9] text-black text-base sm:text-lg md:text-xl lg:text-[25px] w-full max-w-[350px] text-center mb-2.5 p-2 rounded-[10px] border-[3px] border-solid border-[#D28B4E] font-['Jersey_10']"
                   placeholder="Enter your password"
+                  onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEnter(e);
+                  }
+                  }}
               />
           </div>
 
