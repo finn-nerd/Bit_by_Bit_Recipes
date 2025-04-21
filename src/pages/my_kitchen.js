@@ -24,8 +24,10 @@ function MyKitchen({ isLoggedIn }) {
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
 
     // If the user is not logged in, prompt them
+    const backRedirect = () => router.back();
     const loginRedirect = () => router.push('/login');
-    const backRedirect = () => router.push('/home');
+    const homeRedirect = () => router.push('/home');
+    
 
     // Logout functionality
     const handleLogout = async () => {
@@ -38,8 +40,8 @@ function MyKitchen({ isLoggedIn }) {
             });
             
             if (res.ok) {
-                // Redirect to login page after successful logout
-                router.push('/login');
+                // Redirect to home page after successful logout
+                router.push('/home');
             } else {
                 console.error('Failed to logout');
             }
@@ -48,6 +50,7 @@ function MyKitchen({ isLoggedIn }) {
         }
     };
 
+    // Return a different page if the user is not logged in
     if (!isLoggedIn)
         return (
             <div className="App">
@@ -249,7 +252,7 @@ function MyKitchen({ isLoggedIn }) {
                     <button 
                     className="cursor-pointer bg-[#EB4B4B] text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[40px] px-5 py-3 mx-10 rounded-[20px] border-[4px] border-[#B21F1F] font-['Jersey_10'] z-20"
                     type="button" 
-                    onClick={backRedirect}>
+                    onClick={homeRedirect}>
                         Back to Home
                     </button>
 

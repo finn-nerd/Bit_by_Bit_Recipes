@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: 'Missing username or password' });
+    return res.status(400).json({ message: 'Missing username or password.' });
   }
   
   try {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       const dbResult = await client.query('SELECT * FROM users WHERE username = $1', [username]);
       
       if (dbResult.rows.length === 0) {
-        return { status: 401, data: { message: 'Invalid credentials' } };
+        return { status: 401, data: { message: 'Invalid credentials.' } };
       }
       
       const user = dbResult.rows[0];
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       const isValid = await bcrypt.compare(password, user.password);
       
       if (!isValid) {
-        return { status: 401, data: { message: 'Invalid credentials' } };
+        return { status: 401, data: { message: 'Username or password is incorrect!' } };
       }
 
       // Sign a JWT
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       // Return the result with status, data and token
       return { 
         status: 200, 
-        data: { message: 'Login successful' },
+        data: { message: 'Login successful!' },
         token: token
       };
     });

@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Sidebar from '../../components/sidebar'
 import { Listbox } from '@headlessui/react';
+import { parseCookies } from 'nookies';
 
-function Home() {
+export async function getServerSideProps(ctx) {
+    const { token } = parseCookies(ctx);
+
+    // Pass token status as a prop to the page
+    return {
+        props: { isLoggedIn: Boolean(token) },
+    };
+}
+
+function Home({ isLoggedIn }) {
   const router = useRouter();
   const [userInputResponse, setUserInputResponse] = useState('');
 
@@ -29,7 +39,7 @@ function Home() {
   // side bar
   const [openSidebar, setOpenSidebar] = useState(false); // sidebar isnt open by default
 
-  // Create list of favorited meals
+  // Create list of saved meals
   const [savedMeals, setSavedMeals] = useState([]); // or useState(new Set())
 
   useEffect(() => {
@@ -43,16 +53,19 @@ function Home() {
     fetchMeals()
   }, [selectedArea, selectedCat, filteredIngredients]);
 
-    // Find currently favorited meals
+    // Find currently saved meals
     const fetchSavedMeals = async () => {
-        try {
-            const res = await fetch('/api/fetch_saved_meals');
-            if (!res.ok) throw new Error(await res.text());
-            const { savedMeals } = await res.json();
-            setSavedMeals(savedMeals.map(m => m.mealID));
-        } catch (err) {
-            console.error('Could not load saved recipes:', err);
+        if (isLoggedIn) {
+            try {
+                const res = await fetch('/api/fetch_saved_meals');
+                if (!res.ok) throw new Error(await res.text());
+                const { savedMeals } = await res.json();
+                setSavedMeals(savedMeals.map(m => m.mealID));
+            } catch (err) {
+                console.error('Could not load saved recipes:', err);
+            }
         }
+        else setSavedMeals([]);
     };
 
     // Favorite a meal
@@ -318,59 +331,55 @@ function Home() {
         {/* Meal Cards */}
         <div className="w-[82%] flex py-15">
           <div className="flex flex-wrap gap-7">
-
-            {loading ? (
-              <p className="text-white text-2xl font-bold">Loading...</p>
-            ) : meals.length > 0 ? (
-              meals.map((meal) => {
-                const isSaved = savedMeals.includes(meal.idMeal);
-                return (
-                    <div
-                    key={meal.idMeal}
-                    onClick={() => handleRedirect(meal.idMeal)}
-                    className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
-                    >
-                    {/* Favorite Button */}
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation(); // Prevent triggering onClick of the card
-                            toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
-                        }}
-                        className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200"
-                    >
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        className={`w-6 h-6 text-yellow-400 ${isSaved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`}
+              {loading ? (
+                <p className="text-white text-2xl font-bold">Loading...</p>
+              ) : meals.length > 0 ? (
+                meals.map((meal) => {
+                  const isSaved = savedMeals.includes(meal.idMeal);
+                  return (
+                        <div
+                        key={meal.idMeal}
+                        onClick={() => handleRedirect(meal.idMeal)}
+                        className="cursor-pointer relative h-60 aspect-[4/3] w-[280px] rounded-[20px] bg-[#E76A30] shadow-[0_12px_24px_rgba(0,0,0,0.4)] text-center group"
                         >
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                    </button>
-                    {/* Recipe Image */}
-                    <div className="flex-1" style={{ height: '65%' }}>
-                        <img
-                        src={meal.strMealThumb}
-                        alt={meal.strMeal}
-                        className="w-full h-full object-cover rounded-t-[12px]"
-                        />
-                    </div>
-                    {/* Recipe Title */}
-                    <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
-                        <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
-                    </div>
-                    </div>
-                    )
-                }
-              )
-            ) : (
-              <p className="text-white text-2xl font-bold">{userInputResponse}</p>
-            )}
-          </div>
-        </div>
-      </div>
+                  {/* Favorite Button */}
+                  {isLoggedIn && ( // Only show when user is logged in
+                  <button
+                      onClick={(e) => {
+                          e.stopPropagation(); // Prevent triggering onClick of the card
+                          toggleSavedMeal(meal);  // Send meal to backend to be favorited/unfavorited
+                      }}
+                      className="cursor-pointer absolute top-2 right-2 transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200" />
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                  </button>
+                  )}
 
-      {/* sidebar */}
-      <Sidebar isOpen={openSidebar} isClose={closeSidebar} />
+                  {/* Recipe Image */}
+                  <div className="flex-1" style={{ height: '65%' }}>
+                      <img
+                      src={meal.strMealThumb}
+                      alt={meal.strMeal}
+                      className="w-full h-full object-cover rounded-t-[12px]"
+                      />
+                  </div>
+                  {/* Recipe Title */}
+                  <div className="flex-1 flex items-center justify-center overflow-hidden" style={{ height: '35%' }}>
+                      <p className="text-white font-['Jersey_10'] p-3 text-2xl line-clamp-2">{meal.strMeal}</p>
+                  </div>
+                  </div>
+                  )
+              }
+            )
+          ) : (
+            <p className="text-white text-2xl font-bold">{userInputResponse}</p>
+          )}
+        </div>
+       </div>
+     </div>
+
+        {/* sidebar */}
+        <Sidebar isOpen={openSidebar} isClose={closeSidebar} isLoggedIn={isLoggedIn}/>
 
     </div>
   );
